@@ -5,11 +5,15 @@
 \usepackage{amsfonts,amssymb}
 \usepackage{amsmath}
 \usepackage{comment}
+\relpenalty=9999
+\binoppenalty=9999
 
 \begin{document}
 \pagestyle{plain}
 \titleformat{\subsection}[runin]
   {\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}[runin]
+  {\normalfont\large\bfseries}{\thesubsubsection}{1em}{}
 
 \title{CIS 677: Homework 1}
 \author{Rohan Shah}
@@ -46,8 +50,8 @@ Thus since our analysis for the probability of success is the same as the
 contraction algorithm the probability that $S_1$ and $S_2$ correspond to the two
 sides of the minimum cut is $\Omega(\frac{1}{n^2})$. 
 
+\newpage
 \section*{Problem 2.}
-
 If $NP \subseteq BPP$ then there is exists a BPP algorithm for SAT. Without
 loss of generality we say this algorithm returns a correct answer with probability
 at least $1 - \frac{1}{n^2}$. We can convert this BPP algorithm to an RP
@@ -74,4 +78,103 @@ $(1 - \frac{1}{n^2})^n \ge \frac{1}{2}$. So with probability greater than
 $\frac{1}{2}$ our RP algorithm returns the correct answer when the SAT problem
 is in fact satisfiable, which is what is required for an RP algorithm.
 Therefore $NP \subseteq RP$.
+
+\newpage
+\section*{Problem 3.}
+\subsection*{(a)} For each $S\subseteq \{1,...,k\}$ where $S\neq \emptyset$,
+$Y_S$ is uniformly distributed over $\{0,1\}$ i.e.
+$\textbf{Pr}[Y_S = 0] = \textbf{Pr}[Y_S = 1] = \frac{1}{2}$.
+Proof by induction on the cardinality of $S$. Base case: $|S| = 1$.
+Then $S = \{i\}$ for some $i \in \{0,...,k\}$ so $Y_S = \{X_i\}$ thus
+$\textbf{Pr}[Y_S = 0] = \textbf{Pr}[X_i = 0] = \frac{1}{2}$ and 
+$\textbf{Pr}[Y_S = 1] = \textbf{Pr}[X_i = 1] = \frac{1}{2}$.
+Inductive case: $|S| = n$. Then let $S = S' \cup \{i\}$ where
+$|S'| = n-1$, $S' \neq \emptyset$, and $i \notin S'$. Then
+$Y_S = Y_{S'} \oplus X_i$. By the induction hypothesis 
+$\textbf{Pr}[Y_{S'} = 0] = \textbf{Pr}[Y_{S'} = 1] = \frac{1}{2}$. Also,
+$\textbf{Pr}[X_i = 0] = \textbf{Pr}[X_i = 1] = \frac{1}{2}$.
+So $\textbf{Pr}[Y_S = 0] = \textbf{Pr}[Y_{S'} \oplus X_i = 0] =
+\textbf{Pr}[Y_{S'} = 0]\textbf{Pr}[X_i = 0] +
+\textbf{Pr}[Y_{S'} = 1]\textbf{Pr}[X_i = 1] = \frac{1}{2}$
+and $\textbf{Pr}[Y_S = 1] = \textbf{Pr}[Y_{S'} \oplus X_i = 1] =
+\textbf{Pr}[Y_{S'} = 0]\textbf{Pr}[X_i = 1] +
+\textbf{Pr}[Y_{S'} = 1]\textbf{Pr}[X_i = 0] = \frac{1}{2}$. We can now prove
+$\{Y_S\ |\ S\subseteq \{1,...,k\}, S\neq\emptyset \}$ is a collection of
+pairwise independent random variables. Since $\oplus$ is associative and
+communitive we can write two random variables from the collection,
+$Y_S$ and $Y_T$ as $Y_S = Y_{S\cap T} \oplus Y_{S/T}$ and
+$Y_T = Y_{S\cap T} \oplus Y_{T/S}$ where $S\cap T$, $S/T$, and $T/S$ are disjoint
+and at least two of them are non-empty since $S \neq T$. From a truth table
+for $Y_S$ and $Y_T$ given values for $Y_{S\cap T}$, $Y_{S/T}$ $Y_{T/S}$
+$\textbf{Pr}[Y_S = 0] = \textbf{Pr}[Y_S = 1] = \frac{1}{2}$ and
+$\textbf{Pr}[Y_T = 0] = \textbf{Pr}[Y_T = 1] = \frac{1}{2}$. So
+$\textbf{Pr}[Y_S = a \wedge Y_T = b] = \textbf{Pr}[Y_S = a]\textbf{Pr}[Y_T = b]
+= \frac{1}{4}$.
+
+\subsection*{(b)} Let $h \in H$ be a has function that works in the following
+way. Generate $\log N \log M$ bits uniformly at random. Given an input
+$n \in [N]$ take its bitwise representation of length $\log N$ and xor it with
+the first $\log N$ random bits previously generated. This will generate a new
+random $\log N$ bit string i.e. where each bit is a independent binary random
+variable. Take this bit string and xor the bits in this string together to
+create a single bit which has probability uniformly distributed over $\{0,1\}$
+from part (a). Repeat this procedure for the remaining $(\log M - 1)$ $\log N$
+random bits to give a final $\log M$ randomly generated bit string i.e. an
+element in $M$. Now we need to show that such a hash function is pair-wise
+independent. But we know that for all $i,j \in [N]$, $h(i)$ and $h(j)$ are
+composed of pairwise independent random variables. So if
+$h(i) = k_1k_2...k_{\log M}$ and $h(j) = l_1l_2...l_{\log M}$ then $k_i$ and
+$l_i$ are pairwise independent random variables for all $1 \le i \le \log M$.
+Thus $\textbf{Pr}[h(i) = k \wedge h(j) = l]$ for all $i \neq j \in [N]$ and
+$k,l \in [M]$ is equal to $\textbf{Pr}[h(i) = k]\textbf{Pr}[h(j) = l]$ where the
+probability of each of those is $\frac{1}{M}$ since both $h(i)$ and $h(j)$
+are randomly generated bit strings in $[M]$. So their combined probability is
+$\frac{1}{M^2}$ and therefore $H$ is a family of pairwise independent hash
+functions.
+
+\newpage
+\section*{Problem 4.}
+\subsection*{(a)} Let $t=\epsilon^{-2} \log m$ be the number of elements
+sampled from the stream $S$. By definition the median element in $S$ has rank
+$\frac{m}{2}$ so let $L$ and $H$ be disjoint subsets of $S$ such that
+$$L = \{s_i \mid rank(s_i, S) < (1-\epsilon)\frac{m}{2}\}$$
+$$H = \{s_i \mid rank(s_i, S) > (1+\epsilon)\frac{m}{2}\}$$
+Let $s_i$ be an element sampled from $S$ uniformly at random 
+(with repetition). Then
+$$\textbf{Pr}[s_i \in L] = \frac{(1-\epsilon)\frac{m}{2}}{m} =
+\frac{(1-\epsilon)}{2}$$
+$$\textbf{Pr}[s_i \in H] = \frac{m - (1+\epsilon)\frac{m}{2}}{m} =
+\frac{(1-\epsilon)}{2}$$
+The probability that the algorithm does not return an $\epsilon$-approximate
+median is equal to the probability that greater than or equal to $\frac{t}{2}$
+elements sampled from $S$ are in $L$, or in $H$. Since the probability that
+an element is in $L$ is the same as the probability that an element is in $H$
+we can solve for one of these probabilities and double it to get the
+probability that the element returned is not an $\epsilon$-approximate median.
+Let $X = X_1 + ... + X_t$ where $X_i$ is a binary random variable such that
+$X_i = 1$ if $s_i \in L$ and $X_i = 0$ otherwise. Since $X_i$ is a binary
+random variable, $\textbf{E}[X_i] = \frac{(1-\epsilon)}{2}$ so by linearity of
+expectations $\textbf{E}[X] = t\cdot \frac{(1-\epsilon)}{2}$ from which we get
+$t = \frac{2\cdot \textbf{E}[X]}{(1-\epsilon)}$. So then
+$$\textbf{Pr}[X \ge \frac{t}{2}] =
+\textbf{Pr}[X \ge \frac{\frac{2\cdot \textbf{E}[X]}{(1-\epsilon)}}{2}] =
+\textbf{Pr}[X \ge \frac{1}{(1-\epsilon)}\cdot \textbf{E}[X]]$$
+Since $\epsilon \in (0,\frac{1}{2}]$ we have the inequality that
+$\frac{1}{(1-\epsilon)} \ge (1+\epsilon)$ so
+$$\textbf{Pr}[X \ge \frac{1}{(1-\epsilon)}\cdot \textbf{E}[X]] \le
+\textbf{Pr}[X \ge (1+\epsilon) \cdot \textbf{E}[X]]$$
+Since $0 < \epsilon \le 2e - 1$, by Chernoff bounds we have the inequality that
+$$\textbf{Pr}[X \ge (1+\epsilon) \cdot \textbf{E}[X]] <
+\frac{1}{e^{\frac{\textbf{E}[X]\cdot \epsilon^2}{4}}}$$
+where
+$$\frac{\textbf{E}[X]\cdot \epsilon^2}{4} =
+\frac{t\cdot \frac{(1-\epsilon)}{2} \cdot \epsilon^2}{4} =
+\frac{\epsilon^{-2} \log m \cdot \frac{(1-\epsilon)}{2} \cdot \epsilon^2}{4} =
+(\log m) \cdot \frac{(1-\epsilon)}{8}$$
+So the probability the algorithm does not return an $\epsilon$-approximate
+median is at most, roughly
+$$2\cdot \frac{1}{m^{\frac{(1-\epsilon)}{8}}} \equiv \frac{1}{\text{poly}(m)}$$
+So the probability the algorithm does return an $\epsilon$-approximate
+median is at least
+$$1 - \frac{1}{\text{poly}(m)}$$
 \end{document}
