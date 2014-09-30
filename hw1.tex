@@ -22,33 +22,50 @@
 \maketitle
 
 \section*{Problem 1.}
-For the sets $S_1$ and $S_2$ to correspond to the two sides of the minimum cut
-in the graph $G$ a few properties must hold. The heaviest weight edge in the
-minimum weight spanning tree $T$ that is removed by the algorithm must be an
-edge from the minimum cut. Proof: It must be that at least one edge in $T$ is an
-edge from the min-cut, otherwise $T$ would be not be connected which is a contradiction.
-If the edge removed from $T$ is not an edge from the minimum cut then the
-endpoints of the min-cut edge both lie in either $S_1$ or $S_2$ which means
-$S_1$ and $S_2$ do not correspond to the two sides of the min-cut. By the same
-logic, there must be exactly one edge from the min-cut in $T$. Therefore, for
-$S_1$ and $S_2$ to correspond to the two sides of the min-cut, Kruskal's
-algorithm must select an edge from the min-cut for the first time in its final
-step, i.e. as the $(n-1)th$ edge in $T$. Since we assign the weights $w(e)$ to
-the edges uniformly at random, we are then choosing edges to be in $T$ uniformly
-at random. As a slight modification to Kruskal's algorithm, each time an edge is
-selected to be in $T$ we can remove any edegs adjacent to vertices we just
-connected who now have both their endpoints in the connected components since it
-can never be selected to be in $T$ in the future. We are looking for the
-probability that an edge in the min-cut survives (is not chosen to be in $T$)
-until the final $(n-1)th$ step i.e. that it survives the first $n-2$ edge
-selections. This analysis is exactly the same as the one for the original
-contraction algorithm and further these two algorithms are essentially the same
-where when we pick a minimum weight edge to be in $T$ and remove edges that now
-only connect endpoints in the connected components, it is the same as choosing
-an edge at random and contracting its vertices as in the contraction algorithm.
-Thus since our analysis for the probability of success is the same as the
-contraction algorithm the probability that $S_1$ and $S_2$ correspond to the two
-sides of the minimum cut is $\Omega(\frac{1}{n^2})$. 
+For the sets $S_1$ and $S_2$ to correspond to the two sides of the
+minimum cut in the graph $G$ the following claims must hold:
+\vspace{2mm}
+\newline
+\textbf{Claim:} At least one edge in $T$ is an edge from the min-cut.
+\newline
+\textbf{Proof:} If $T$ does not contain an edge from the min-cut then by
+definition $T$ is cut into two disjoint sets of nodes which means it is not a
+minimum spanning tree, a contradiction.
+\vspace{2mm}
+\newline
+\textbf{Claim:} The heaviest weight edge in the $T$, i.e. the edge that is
+removed from $T$ by the algorithm, must be an edge from the min-cut.
+\newline
+\textbf{Proof:} By the above claim at least on edge in $T$ belongs to the
+min-cut. If the edge removed from $T$ is not an edge from the min-cut then
+the endpoints ofthe min-cut edge both lie in either $S_1$ or $S_2$ which, by
+definition, means $S_1$ and $S_2$ do not correspond to the partitions of the
+min-cut.
+\vspace{2mm}
+\newline
+\textbf{Claim:} There must be exactly one edge from the min-cut in $T$.
+\newline
+\textbf{Proof:} Since only one edge is removed from $T$ at the end of the
+algorithm, if more than one edge from the min-cut is in $T$ then by the same
+logic as the previous claim $S_1$ and $S_2$ cannot correspond to the partitions
+of the min-cut.
+\vspace{2mm}
+\newline
+By the above claims, the probability that $S_1$ and $S_2$ to correspond to the
+two sides of the min-cut is equal to the probability that no edge from the
+min-cut is chosen to be in $T$ in the first $n-2$ steps of Kruskal's algorithm.
+Consider a slight modification to Kruskal's algorithm, where at each step the
+minimum weight edge is chosen to be in $T$, all remaining edges who's remaining
+endpoints are already connected are removed from the selection pool. This is
+safe since those edges could never be chosen to be in $T$ by Kruskal's
+algorithm. Further, this algorithm corresponds directly to each step of the
+contraction algorith. Since the algorithm assigns weights $w(e)$ to the edges
+at random, each step in this modified version of Kruskal's algorithm happens
+by choosing an edge from $G$ at random. Thus this algorithm directly corresponds
+to the contraction algorith. Since we are looking for the probability that all
+edges in the min-cut survive the first $n-2$ edge selections, the analysis is
+exactly the same as the one for the contraction algorithm. Thus, the probability
+of success is $\Omega(\frac{1}{n^2})$.
 
 \newpage
 \section*{Problem 2.}
@@ -81,35 +98,56 @@ Therefore $NP \subseteq RP$.
 
 \newpage
 \section*{Problem 3a.}
-For each $S\subseteq \{1,...,k\}$ where $S\neq \emptyset$,
-$Y_S$ is uniformly distributed over $\{0,1\}$ i.e.
-$\textbf{Pr}[Y_S = 0] = \textbf{Pr}[Y_S = 1] = \frac{1}{2}$.
-Proof by induction on the cardinality of $S$. Base case: $|S| = 1$.
-Then $S = \{i\}$ for some $i \in \{0,...,k\}$ so $Y_S = \{X_i\}$ thus
-$\textbf{Pr}[Y_S = 0] = \textbf{Pr}[X_i = 0] = \frac{1}{2}$ and 
-$\textbf{Pr}[Y_S = 1] = \textbf{Pr}[X_i = 1] = \frac{1}{2}$.
-Inductive case: $|S| = n$. Then let $S = S' \cup \{i\}$ where
+\textbf{Claim:} $\textbf{Pr}[Y_S = 0] = \textbf{Pr}[Y_S = 1] = \frac{1}{2}$
+i.e. $Y_S$ is uniformly distributed over $\{0,1\}$.
+\vspace{2mm}
+\newline
+\textbf{Proof:} By induction on the cardinality of $S$ where $S \neq \emptyset$.
+\newline
+\textbf{Base case:} $|S| = 1$. Then $S = \{i\}$ for some $i \in \{0,...,k\}$
+so $Y_S = \{X_i\}$.
+$$\textbf{Pr}[Y_S = 0] = \textbf{Pr}[X_i = 0] = \frac{1}{2}$$
+$$\textbf{Pr}[Y_S = 1] = \textbf{Pr}[X_i = 1] = \frac{1}{2}$$
+\newline
+\textbf{Inductive case:} $|S| = n$. Then $S = S' \cup \{i\}$ where
 $|S'| = n-1$, $S' \neq \emptyset$, and $i \notin S'$. Then
 $Y_S = Y_{S'} \oplus X_i$. By the induction hypothesis 
-$\textbf{Pr}[Y_{S'} = 0] = \textbf{Pr}[Y_{S'} = 1] = \frac{1}{2}$. Also,
-$\textbf{Pr}[X_i = 0] = \textbf{Pr}[X_i = 1] = \frac{1}{2}$.
-So $\textbf{Pr}[Y_S = 0] = \textbf{Pr}[Y_{S'} \oplus X_i = 0] =
+$\textbf{Pr}[Y_{S'} = 0] = \textbf{Pr}[Y_{S'} = 1] = \frac{1}{2}$.
+So
+$$\textbf{Pr}[Y_S = 0] = \textbf{Pr}[Y_{S'} \oplus X_i = 0] =
 \textbf{Pr}[Y_{S'} = 0]\textbf{Pr}[X_i = 0] +
-\textbf{Pr}[Y_{S'} = 1]\textbf{Pr}[X_i = 1] = \frac{1}{2}$
-and $\textbf{Pr}[Y_S = 1] = \textbf{Pr}[Y_{S'} \oplus X_i = 1] =
+\textbf{Pr}[Y_{S'} = 1]\textbf{Pr}[X_i = 1] = \frac{1}{2}$$
+$$\textbf{Pr}[Y_S = 1] = \textbf{Pr}[Y_{S'} \oplus X_i = 1] =
 \textbf{Pr}[Y_{S'} = 0]\textbf{Pr}[X_i = 1] +
-\textbf{Pr}[Y_{S'} = 1]\textbf{Pr}[X_i = 0] = \frac{1}{2}$. We can now prove
-$\{Y_S\ |\ S\subseteq \{1,...,k\}, S\neq\emptyset \}$ is a collection of
-pairwise independent random variables. Since $\oplus$ is associative and
-communitive we can write two random variables from the collection,
-$Y_S$ and $Y_T$ as $Y_S = Y_{S\cap T} \oplus Y_{S/T}$ and
-$Y_T = Y_{S\cap T} \oplus Y_{T/S}$ where $S\cap T$, $S/T$, and $T/S$ are disjoint
-and at least two of them are non-empty since $S \neq T$. From a truth table
-for $Y_S$ and $Y_T$ given values for $Y_{S\cap T}$, $Y_{S/T}$ $Y_{T/S}$
-$\textbf{Pr}[Y_S = 0] = \textbf{Pr}[Y_S = 1] = \frac{1}{2}$ and
-$\textbf{Pr}[Y_T = 0] = \textbf{Pr}[Y_T = 1] = \frac{1}{2}$. So
-$\textbf{Pr}[Y_S = a \wedge Y_T = b] = \textbf{Pr}[Y_S = a]\textbf{Pr}[Y_T = b]
-= \frac{1}{4}$.
+\textbf{Pr}[Y_{S'} = 1]\textbf{Pr}[X_i = 0] = \frac{1}{2}$$
+\newline
+We can now prove $\{Y_S\ |\ S\subseteq \{1,...,k\}, S\neq\emptyset \}$ is a
+collection of pairwise independent random variables. Since $\oplus$ is
+associative and communitive we can write two random variables from the
+collection, $Y_S$ and $Y_T$ as
+$$Y_S = Y_{S\cap T} \oplus Y_{S/T}$$
+$$Y_T = Y_{S\cap T} \oplus Y_{T/S}$$
+where $S\cap T$, $S/T$, and $T/S$ are disjoint, which from the above claim means
+$Y_{S\cap T}$, $Y_{S/T}$, $Y_{T/S}$ each take a value of $\{0,1\}$ with equal
+probability. From the following truth table we get
+\begin{center}
+\begin{tabular}{| c | c | c || c | c |}
+\hline
+$Y_{S/T}$ & $Y_{T/S}$ & $Y_{S\cap T}$ & $Y_S$ & $Y_T$ \\ \hline
+0 & 0 & 0 & 0 & 0 \\ \hline
+0 & 0 & 1 & 1 & 1 \\ \hline
+0 & 1 & 0 & 0 & 1 \\ \hline
+0 & 1 & 1 & 1 & 0 \\ \hline
+1 & 0 & 0 & 1 & 0 \\ \hline
+1 & 0 & 1 & 0 & 1 \\ \hline
+1 & 1 & 0 & 1 & 1 \\ \hline
+1 & 1 & 1 & 0 & 0 \\ \hline
+\end{tabular}
+\end{center}
+$$\textbf{Pr}[Y_S = 0] = \textbf{Pr}[Y_S = 1] = \frac{1}{2}$$
+$$\textbf{Pr}[Y_T = 0] = \textbf{Pr}[Y_T = 1] = \frac{1}{2}$$
+$$\textbf{Pr}[Y_S = a \wedge Y_T = b] = \textbf{Pr}[Y_S = a]\textbf{Pr}[Y_T = b]
+= \frac{1}{4}$$
 
 \newpage
 \section*{Problem 3b.} Let $h \in H$ be a has function that works in the following
@@ -168,17 +206,14 @@ $$\textbf{Pr}[X \ge \frac{1}{(1-\epsilon)}\cdot \textbf{E}[X]] \le
 Since $0 < \epsilon \le 2e - 1$, by Chernoff bounds we have the inequality that
 $$\textbf{Pr}[X \ge (1+\epsilon) \cdot \textbf{E}[X]] <
 \frac{1}{e^{\frac{\textbf{E}[X]\cdot \epsilon^2}{4}}}$$
-where
 $$\frac{\textbf{E}[X]\cdot \epsilon^2}{4} =
 \frac{t\cdot \frac{(1-\epsilon)}{2} \cdot \epsilon^2}{4} =
 \frac{\epsilon^{-2} \log m \cdot \frac{(1-\epsilon)}{2} \cdot \epsilon^2}{4} =
 (\log m) \cdot \frac{(1-\epsilon)}{8}$$
-So the probability the algorithm does not return an $\epsilon$-approximate
-median is at most, roughly
-$$2\cdot \frac{1}{m^{\frac{(1-\epsilon)}{8}}} \equiv \frac{1}{\text{poly}(m)}$$
-So the probability the algorithm does return an $\epsilon$-approximate
-median is at least
-$$1 - \frac{1}{\text{poly}(m)}$$
+$$\textbf{Pr}[X \ge (1+\epsilon) \cdot \textbf{E}[X]] <
+\frac{1}{\text{poly}(m)}$$
+So the probability the algorithm returns an $\epsilon$-approximate median is at
+least $$1 - \frac{1}{\text{poly}(m)}$$
 
 \newpage
 \section*{Problem 4b.}
@@ -201,8 +236,8 @@ $X_i = 0$ otherwise. Since $X_i$ is a binary random variable
 $$\textbf{E}[X_i] = \textbf{Pr}[X_i = 1] = \frac{t}{r}\cdot
 \frac{(1-\epsilon)\cdot r}{m} = \frac{t\cdot (1-\epsilon)}{m}$$
 so by linearity of expectations $\textbf{E}[X] =
-\frac{t\cdot (1-\epsilon)}{m}\cdot m = t\cdot(1-\epsilon)$ from which we get
-$t = \frac{\textbf{E}[X]}{(1-\epsilon)}$. From part (a) we have that
+\frac{t\cdot (1-\epsilon)}{m}\cdot m = t\cdot(1-\epsilon)$. From part (a) we
+have that
 $$\textbf{Pr}[X \ge t] =
 \textbf{Pr}[X \ge \frac{1}{(1-\epsilon)}\cdot \textbf{E}[X]] <
 \frac{1}{\text{poly}(m)}$$
@@ -212,21 +247,17 @@ $$\textbf{Pr}[s_i \in L] = \frac{(1+\epsilon)\cdot r}{m}$$
 $$\textbf{E}[X_i] = \textbf{Pr}[X_i = 1] = \frac{t}{r}\cdot
 \frac{(1+\epsilon)\cdot r}{m} = \frac{t\cdot(1+\epsilon)}{m}$$
 $$\textbf{E}[X] = m\cdot \frac{t\cdot(1+\epsilon)}{m}= t\cdot (1+\epsilon)$$
-$$t = \frac{\textbf{E}[X]}{(1+\epsilon)}$$
 $$\textbf{Pr}[X < t] =
 \textbf{Pr}[X < \frac{1}{1+\epsilon}\cdot\textbf{E}[X]] \le
 \textbf{Pr}[X < (1-\epsilon)\cdot\textbf{E}[X]]$$
 $$\textbf{Pr}[X < (1-\epsilon)\cdot\textbf{E}[X]] <
 \frac{1}{e^{\frac{\textbf{E}[X]\cdot\epsilon^2}{2}}}
 \text{ by Chernoff bounds}$$
-$$\frac{\textbf{E}[X]\cdot\epsilon^2}{2} =
-\frac{t\cdot (1+\epsilon)\cdot\epsilon^2}{2} =
-\frac{24\cdot\epsilon^{-2}\log m \cdot (1+\epsilon)\cdot\epsilon^2}{2} =
-12\cdot(1+\epsilon)\cdot \log m$$
 $$\textbf{Pr}[X < t] < \frac{1}{m^{12\cdot(1+\epsilon)}} \equiv
 \frac{1}{\text{poly}(m)}$$
 Therefore the algorithm outputs an $\epsilon$-approximate element of rank $r$
-with probability $1-\frac{1}{\text{poly}(m)}$.
+with probability at least
+$$1-\frac{1}{\text{poly}(m)}$$
 
 \newpage
 \section*{Problem 5a.}
