@@ -80,8 +80,8 @@ is in fact satisfiable, which is what is required for an RP algorithm.
 Therefore $NP \subseteq RP$.
 
 \newpage
-\section*{Problem 3.}
-\subsection*{(a)} For each $S\subseteq \{1,...,k\}$ where $S\neq \emptyset$,
+\section*{Problem 3a.}
+For each $S\subseteq \{1,...,k\}$ where $S\neq \emptyset$,
 $Y_S$ is uniformly distributed over $\{0,1\}$ i.e.
 $\textbf{Pr}[Y_S = 0] = \textbf{Pr}[Y_S = 1] = \frac{1}{2}$.
 Proof by induction on the cardinality of $S$. Base case: $|S| = 1$.
@@ -111,7 +111,8 @@ $\textbf{Pr}[Y_T = 0] = \textbf{Pr}[Y_T = 1] = \frac{1}{2}$. So
 $\textbf{Pr}[Y_S = a \wedge Y_T = b] = \textbf{Pr}[Y_S = a]\textbf{Pr}[Y_T = b]
 = \frac{1}{4}$.
 
-\subsection*{(b)} Let $h \in H$ be a has function that works in the following
+\newpage
+\section*{Problem 3b.} Let $h \in H$ be a has function that works in the following
 way. Generate $\log N \log M$ bits uniformly at random. Given an input
 $n \in [N]$ take its bitwise representation of length $\log N$ and xor it with
 the first $\log N$ random bits previously generated. This will generate a new
@@ -133,8 +134,8 @@ $\frac{1}{M^2}$ and therefore $H$ is a family of pairwise independent hash
 functions.
 
 \newpage
-\section*{Problem 4.}
-\subsection*{(a)} Let $t=\epsilon^{-2} \log m$ be the number of elements
+\section*{Problem 4a.}
+Let $t=\epsilon^{-2} \log m$ be the number of elements
 sampled from the stream $S$. By definition the median element in $S$ has rank
 $\frac{m}{2}$ so let $L$ and $H$ be disjoint subsets of $S$ such that
 $$L = \{s_i \mid rank(s_i, S) < (1-\epsilon)\frac{m}{2}\}$$
@@ -146,13 +147,14 @@ $$\textbf{Pr}[s_i \in L] = \frac{(1-\epsilon)\frac{m}{2}}{m} =
 $$\textbf{Pr}[s_i \in H] = \frac{m - (1+\epsilon)\frac{m}{2}}{m} =
 \frac{(1-\epsilon)}{2}$$
 The probability that the algorithm does not return an $\epsilon$-approximate
-median is equal to the probability that greater than or equal to $\frac{t}{2}$
-elements sampled from $S$ are in $L$, or in $H$. Since the probability that
-an element is in $L$ is the same as the probability that an element is in $H$
-we can solve for one of these probabilities and double it to get the
-probability that the element returned is not an $\epsilon$-approximate median.
-Let $X = X_1 + ... + X_t$ where $X_i$ is a binary random variable such that
-$X_i = 1$ if $s_i \in L$ and $X_i = 0$ otherwise. Since $X_i$ is a binary
+median is equal to the probability that greater than or equal to half
+elements sampled from $S$ are in $L$, or in $H$. Since $L$ and $H$ are disjoint
+and the probability that an element is in $L$ is the same as the probability
+that an element is in $H$, the probability that the element returned
+is not an $\epsilon$-approximate median is twice the probability that
+greater than or equal to half the elements sampled are in $L$.
+Let $X = X_1 + ... + X_t$ where $X_i$ is a binary random variable such
+that $X_i = 1$ if $s_i \in L$ and $X_i = 0$ otherwise. Since $X_i$ is a binary
 random variable, $\textbf{E}[X_i] = \frac{(1-\epsilon)}{2}$ so by linearity of
 expectations $\textbf{E}[X] = t\cdot \frac{(1-\epsilon)}{2}$ from which we get
 $t = \frac{2\cdot \textbf{E}[X]}{(1-\epsilon)}$. So then
@@ -177,4 +179,59 @@ $$2\cdot \frac{1}{m^{\frac{(1-\epsilon)}{8}}} \equiv \frac{1}{\text{poly}(m)}$$
 So the probability the algorithm does return an $\epsilon$-approximate
 median is at least
 $$1 - \frac{1}{\text{poly}(m)}$$
+
+\newpage
+\section*{Problem 4b.}
+If $r \le t$ then the algorithm outputs an $\epsilon$-approximate element of
+rank $r$ with probability $1$ since it maintains a list $T$ of the $r$ smallest
+elements and outputs the largest element, which is equivalent to the
+$r$th smallest element, which by definition has rank $r$. If $r > t$ then the
+probability that the element output by the algorithm is not an
+$\epsilon$-approximate median is equal to the probability that the rank of
+the largest element in $T$ is less than $(1-\epsilon)\cdot r$ or greater than
+$(1+\epsilon)\cdot r$. The former only occurs when greater than or equal to
+$t$ of the elements sampled have ranks less than $(1-\epsilon)\cdot r$. The
+latter only occurs when less than $t$ of the elements sampled have ranks less
+than or equal to $(1+\epsilon)\cdot r$. Let $L$ be a subset of $S$ such that
+$$L = \{s_i \mid rank(s_i, S) < (1-\epsilon)\cdot r\}$$
+$$\textbf{Pr}[s_i \in L] = \frac{(1-\epsilon)\cdot r}{m}$$
+Let $X = X_1 + ... + X_m$ where $X_i$ is a binary random variable such
+that $X_i = 1$ if $s_i$ was sampled from the $S$ and $s_i \in L$ and
+$X_i = 0$ otherwise. Since $X_i$ is a binary random variable
+$$\textbf{E}[X_i] = \textbf{Pr}[X_i = 1] = \frac{t}{r}\cdot
+\frac{(1-\epsilon)\cdot r}{m} = \frac{t\cdot (1-\epsilon)}{m}$$
+so by linearity of expectations $\textbf{E}[X] =
+\frac{t\cdot (1-\epsilon)}{m}\cdot m = t\cdot(1-\epsilon)$ from which we get
+$t = \frac{\textbf{E}[X]}{(1-\epsilon)}$. From part (a) we have that
+$$\textbf{Pr}[X \ge t] =
+\textbf{Pr}[X \ge \frac{1}{(1-\epsilon)}\cdot \textbf{E}[X]] <
+\frac{1}{\text{poly}(m)}$$
+which is the probability that the former event occurs. For the latter we have
+$$L = \{s_i \mid rank(s_i, S) < (1+\epsilon)\cdot r\}$$
+$$\textbf{Pr}[s_i \in L] = \frac{(1+\epsilon)\cdot r}{m}$$
+$$\textbf{E}[X_i] = \textbf{Pr}[X_i = 1] = \frac{t}{r}\cdot
+\frac{(1+\epsilon)\cdot r}{m} = \frac{t\cdot(1+\epsilon)}{m}$$
+$$\textbf{E}[X] = m\cdot \frac{t\cdot(1+\epsilon)}{m}= t\cdot (1+\epsilon)$$
+$$t = \frac{\textbf{E}[X]}{(1+\epsilon)}$$
+$$\textbf{Pr}[X < t] =
+\textbf{Pr}[X < \frac{1}{1+\epsilon}\cdot\textbf{E}[X]] \le
+\textbf{Pr}[X < (1-\epsilon)\cdot\textbf{E}[X]]$$
+$$\textbf{Pr}[X < (1-\epsilon)\cdot\textbf{E}[X]] <
+\frac{1}{e^{\frac{\textbf{E}[X]\cdot\epsilon^2}{2}}}
+\text{ by Chernoff bounds}$$
+$$\frac{\textbf{E}[X]\cdot\epsilon^2}{2} =
+\frac{t\cdot (1+\epsilon)\cdot\epsilon^2}{2} =
+\frac{24\cdot\epsilon^{-2}\log m \cdot (1+\epsilon)\cdot\epsilon^2}{2} =
+12\cdot(1+\epsilon)\cdot \log m$$
+$$\textbf{Pr}[X < t] < \frac{1}{m^{12\cdot(1+\epsilon)}} \equiv
+\frac{1}{\text{poly}(m)}$$
+Therefore the algorithm outputs an $\epsilon$-approximate element of rank $r$
+with probability $1-\frac{1}{\text{poly}(m)}$.
+
+\newpage
+\section*{Problem 5a.}
+
+\newpage
+\section*{Problem 5b.}
+
 \end{document}
