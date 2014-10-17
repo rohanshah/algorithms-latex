@@ -1,0 +1,71 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{titlesec}
+\usepackage{tikz}
+\usepackage{amsfonts,amssymb}
+\usepackage{amsmath}
+\usepackage{comment}
+\relpenalty=9999
+\binoppenalty=9999
+
+\begin{document}
+\pagestyle{plain}
+\titleformat{\subsection}[runin]
+  {\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}[runin]
+  {\normalfont\large\bfseries}{\thesubsubsection}{1em}{}
+
+\section*{Problem 2a.}
+
+Let $X = X_1 + X_2 + \cdots + X_m$ where $m$ is the number of edges in $G$ and
+$X_i$ is a binary random variable such that $X_i = 1$ if an edge $i$ is in the
+cut and $X_i = 0$ otherwise. Let $i = (u,v)$ for some $u,v \in V$. Then
+$$\textbf{Pr}[X_i = 1] = \textbf{Pr}[u \in S \text{ and } v \in T] \text{ or }
+\textbf{Pr}[v \in S \text{ and } u \in T]$$
+$$\textbf{Pr}[X_i = 0] = \textbf{Pr}[u \in S \text{ and } v \in S] \text{ or }
+\textbf{Pr}[u \in T \text{ and } v \in T]$$
+Since the algorithm assigns vertices to $S$ and $T$ independently and with equal
+probability
+$$\textbf{Pr}[X_i = 1] = \textbf{Pr}[u \in S]\cdot\textbf{Pr}[v \in T] +
+\textbf{Pr}[v \in S]\cdot\textbf{Pr}[u \in T] =
+\frac{1}{2}\cdot\frac{1}{2} + \frac{1}{2}\cdot\frac{1}{2} = \frac{1}{2}$$
+$$\textbf{Pr}[X_i = 0] = \textbf{Pr}[u \in S]\cdot\textbf{Pr}[v \in S] +
+\textbf{Pr}[u \in T]\cdot\textbf{Pr}[v \in T] =
+\frac{1}{2}\cdot\frac{1}{2} + \frac{1}{2}\cdot\frac{1}{2} = \frac{1}{2}$$
+Since $X_i$ are independent binary random variables
+$$\textbf{E}[X_i] = \textbf{Pr}[X_i = 1] = \frac{1}{2}$$
+And by the linearity of expectation
+$$\textbf{E}[X] = \sum_{i=1}^m \textbf{E}[X_i] = \frac{m}{2}$$
+Since the upper bound on the optimum solution for MAX-CUT is $m$ this is a
+2-approximation algorithm in expectation.
+
+\section*{Problem 2b.}
+In part (a) each vertex $v$ is placed in $S$ and $T$ independently. We can
+require something weaker, for each vertex to be placed pairwise-independently,
+that is, for any pair of vertices $(u,v)$, $u$ and $v$ are placed in $S$ and $T$
+independently. To show this, consider two edges $i \neq j$ such that
+$i = (u,v)$ and $j = (u,v')$ share an endpoint in $G$. By the definition of
+pairwise-independence, $u$ and $v$ are placed in $S$ and $T$ independently and
+$u$ and $v'$ are also placed in $S$ and $T$ independently. Let $C$ be the cut
+produced by the algorithm. Then $\textbf{Pr}[i \in C] = \textbf{Pr}[j \in C] =
+\frac{1}{2}$ as shown above. In homework one, problem three we showed that $n$
+pairwise independent random variables can be constructed using
+$\lfloor{\log n}\rfloor + 1$ random bits. Consider the following algorithm:
+Assign each of the $n$ constructed pairwise independent random variables,
+$Y_1...Y_n$, to the each of the vertices $v_1...v_n \in V$. Run the algorithm
+from part (a), i.e. place $v_i$ in $S$ if $Y_i = 1$ and in $T$ otherwise.
+We again have a 2-approximate randomized algorithm in expectation for MAX-CUT
+by the analysis above.
+
+\section*{Problem 2c.}
+Consider the algorithm from part (b) as a black box that when fed an
+assignment for the ($\log n$) random bits produces a 2-approximate solution for
+MAX-CUT in expectation. If we enumerate all possible assignments to the $\log n$
+random bits we can generate $2^{\log n} = n$ solutions for MAX-CUT. Since the
+algorithm produces a 2-approximate solution in expectation if we enumerate all
+possible assignments then we are guarenteed to be given at least one
+2-approximate solution for the problem. We can then return the largest solution
+output by the algorithm after all $n$ runs as our answer to obtain a
+deterministic 2-approximation algorithm.
+
+\end{document}
