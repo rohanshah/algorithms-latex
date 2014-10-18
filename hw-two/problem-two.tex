@@ -22,15 +22,10 @@ $X_i$ is a binary random variable such that $X_i = 1$ if an edge $i$ is in the
 cut and $X_i = 0$ otherwise. Let $i = (u,v)$ for some $u,v \in V$. Then
 $$\textbf{Pr}[X_i = 1] = \textbf{Pr}[u \in S \text{ and } v \in T] \text{ or }
 \textbf{Pr}[v \in S \text{ and } u \in T]$$
-$$\textbf{Pr}[X_i = 0] = \textbf{Pr}[u \in S \text{ and } v \in S] \text{ or }
-\textbf{Pr}[u \in T \text{ and } v \in T]$$
 Since the algorithm assigns vertices to $S$ and $T$ independently and with equal
 probability
 $$\textbf{Pr}[X_i = 1] = \textbf{Pr}[u \in S]\cdot\textbf{Pr}[v \in T] +
 \textbf{Pr}[v \in S]\cdot\textbf{Pr}[u \in T] =
-\frac{1}{2}\cdot\frac{1}{2} + \frac{1}{2}\cdot\frac{1}{2} = \frac{1}{2}$$
-$$\textbf{Pr}[X_i = 0] = \textbf{Pr}[u \in S]\cdot\textbf{Pr}[v \in S] +
-\textbf{Pr}[u \in T]\cdot\textbf{Pr}[v \in T] =
 \frac{1}{2}\cdot\frac{1}{2} + \frac{1}{2}\cdot\frac{1}{2} = \frac{1}{2}$$
 Since $X_i$ are independent binary random variables
 $$\textbf{E}[X_i] = \textbf{Pr}[X_i = 1] = \frac{1}{2}$$

@@ -1,0 +1,47 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{titlesec}
+\usepackage{tikz}
+\usepackage{amsfonts,amssymb}
+\usepackage{amsmath}
+\usepackage{comment}
+\relpenalty=9999
+\binoppenalty=9999
+
+\begin{document}
+\pagestyle{plain}
+\titleformat{\subsection}[runin]
+  {\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}[runin]
+  {\normalfont\large\bfseries}{\thesubsubsection}{1em}{}
+
+\section*{Problem 5a.}
+\textbf{Theorem:} The function $M(x)$ is well-defined for all $x\in\{0,1\}^+$
+(non-empty strings).
+\newline
+\textbf{Proof:} By straight forward induction on the length of $x$.
+\vspace{2mm}
+\newline
+\textbf{Base Case:} $|x| = 1$. Then either $x = 0$ or $x = 1$ where both
+$M(0)$ and $M(1)$ are well-defined $2\times 2$ matrices by definition.
+\vspace{2mm}
+\newline
+\textbf{Inductive Case:} $|x| = n + 1$. Then $x = x'y$ where $|x'| = n$ and
+$y\in \{0,1\}$. Then $M(x) = M(x'y)$ which by definition is equal to
+$M(x') \times M(y)$ where $M(y) = M(0) \text{ or } M(1)$ which are both
+well-defined $2 \times 2$ matrices by definition and $M(x')$ is a well-defined
+$2 \times 2$ matrix by the induction hypothesis. Thus, $M(x)$ is the product of
+two well-defined $2 \times 2$ matrices which itself is well-defined.
+\vspace{6mm}
+\newline
+\textbf{Theorem:} $M(x) = M(y) \implies x = y$.
+\newline
+\textbf{Proof:}
+\vspace{6mm}
+\newline
+\textbf{Theorem:} For every $x \in \{0,1\}^n$, the entries of $M(x)$ are bounded
+by Fibonacci number $F_n$.
+\newline
+\textbf{Proof:}
+\section*{Problem 5b.}
+\end{document}
