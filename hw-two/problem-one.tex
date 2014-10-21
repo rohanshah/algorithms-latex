@@ -18,32 +18,40 @@
 \section*{Problem 1.}
 Consider the transpose permutation, where each packet has a source node of
 the form $a_ib_i$ and a destination node of the form $b_ia_i$ where $a_i$
-and $b_i$ are binary strings of length $\frac{n}{2}$. Now consider the
-$2^{\frac{n}{2}}$ packets whose $b_i = 0^{\frac{n}{2}}$. We now consider the
-probability that such a packet passes through the node $0^n$ during its routing.
-Each packet has some number, say $k$, $1$'s in its $a_i$. For a packet to pass
-through the node $0^n$, the bit-fixing algorithm must fix all $k$ $1$'s to
-$0$'s in $a_i$ before fixing any of the $k$ $0$'s to $1$'s in $b_i$, i.e. the
-first $k$ bits the algorithm fixes must all be in $a_i$. Since the algorithm
-fixes bits in random order, there is only one set of selections from the
-${2k \choose k}$ possible combinations for the selection of the first $k$ bits
-fixed, the probability that a packet with $k$ $1$'s in its $a_i$ passes through
-$0^n$ is $\frac{1}{{2k \choose k}}$.
-Since there are $2^{\frac{n}{2}}$ such packets total, for a fixed $k$ there are
-${\frac{n}{2} \choose k}$ packets, so the expected number of such packets given
-a fixed $k$ to pass through $0^n$ is
-$${\frac{n}{2} \choose k} \cdot \frac{1}{{2k \choose k}}$$
+and $b_i$ are binary strings of length $n/2$. Now consider the
+$2^{n/2}$ packets whose $b_i = 0^{n/2}$. Each such packet has $k$ $1$'s in its
+$a_i$, and equivalently, $k$ $0$'s in its $b_i$ that need to be flipped in order
+for the packet to complete its routing. For some fixed $k$ there are
+${n/2 \choose k}$ such packets. Let $X = X_1 + \cdots + X_{{n/2 \choose k}}$
+where $X_i$ is a binary random variable such that $X_i = 1$ if the $i$-th
+packet of the above form passes through the node $0^n$, for some such fixed $k$.
+Since the algorithm fixes bits in random order, there is only one set of
+selections from the ${2k \choose k}$ possible combinations for the selection of the first $k$ bits
+fixed. Therefore we have
+$$\textbf{Pr}[X_i = 1] = {2k \choose k}^{-1}$$
+Since each $X_i$ are independent binary random variables we have that
+$\textbf{E}[X_i] = \textbf{Pr}[X_i = 1]$ and by the linearity of expectation
+we have
+$$\textbf{E}[X] = \sum_{i=1}^{{n/2 \choose k}} {2k \choose k}^{-1} =
+\frac{{n/2 \choose k}}{{2k \choose k}}$$
 From the given inequalities we have
-$$\left(\frac{\frac{n}{2}}{k}\right)^k \le {\frac{n}{2} \choose k} \text{ and }
+$$\left(\frac{n/2}{k}\right)^k \le {n/2 \choose k} \text{ and }
 {2k \choose k} \le \left(\frac{2ke}{k}\right)^k$$
 which gives
-$$\frac{{\frac{n}{2} \choose k}}{{2k \choose k}} \ge
-\frac{\left(\frac{\frac{n}{2}}{k}\right)^k}{\left(\frac{2ke}{k}\right)^k} =
+$$\frac{{n/2 \choose k}}{{2k \choose k}} \ge
+\frac{\left(\frac{n/2}{k}\right)^k}{\left(\frac{2ke}{k}\right)^k} =
 \left(\frac{n}{4ek}\right)^k$$
 If we fix $k = \frac{n}{8e}$ then the expected number of packets being routed
-through $0^n$ is
+through $0^n$ is at least
 $$\left(\frac{n}{4e\cdot \frac{n}{8e}}\right)^{\frac{n}{8e}} =
-2^{\frac{n}{8e}} = 2^{\Omega(n)}$$.
+2^{\frac{n}{8e}} = 2^{\Omega(n)}$$
+Since each packet is routed independently at random we can use Chernoff bound to
+show:
+$$\textbf{Pr}[X < \frac{2^{\Omega(n)}}{2}]
+\le \frac{1}{e^{\frac{2^{\Omega(n)}}{8}}}$$
+So with high probability, at least $\frac{2^{\Omega(n)}}{2}$ packets pass
+through node $0^n$ so at least $\frac{2^{\Omega(n)}}{2n} = 2^{\Omega(n)}$ steps are
+required to complete the routing.
 
 
 \end{document}

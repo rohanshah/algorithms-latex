@@ -1,0 +1,64 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{titlesec}
+\usepackage{tikz}
+\usepackage{amsfonts,amssymb}
+\usepackage{amsmath}
+\usepackage{comment}
+\relpenalty=9999
+\binoppenalty=9999
+
+\begin{document}
+\pagestyle{plain}
+\titleformat{\subsection}[runin]
+  {\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}[runin]
+  {\normalfont\large\bfseries}{\thesubsubsection}{1em}{}
+
+\section*{Problem 4a.}
+The conditions $x_{i,l} + x_{i,r} + x_{i,b} + x_{i,t} \ge 1$
+and $x_{i,l}, x_{i,r}, x_{i,b}, x_{i,t} \in \{0,1\}$ ensure that
+$\forall 1 \le i \le n$ at least one $x_{i,\lambda} = 1$ which means that at
+least one side of $r_i$ is extended to an edge, so the integer linear program
+will always find a feasible solution to the problem. For each cell $c \in G$ the
+set $P_c$ defines all the rectangles who have the potential to increase the
+density of each point within $c$. Minimizing the number of such rectangles that
+affect a cell once it is determined which side(s) of the rectangle are extended
+is equivalent to minimizing the density for each cell. Minimizing this value for
+every cell in $G$ then is equivalent to finding the minimal maximum density for
+every point which is exactly the problem.
+
+\section*{Problem 4b.}
+Consider the following algorithm. Relax the above integer linear program for the
+problem such that we change the last condition to
+$$0\le x_{i,l}, x_{i,r}, x_{i,b}, x_{i,t} \le 1\ \ \ \ \ \forall 1 \le i \le n$$
+Compute the optimal solution to the linear-program relaxation. Then perform the
+following deterministic rounding scheme: for each $1 \le i \le n$, set the
+$x_{i,\lambda}$ with the greatest value equal to $1$ and $0$ otherwise. This
+rounding scheme always computes a feasible solution for the problem since for
+every rectangle $r_i$ at least one direction $\lambda$ such that
+$x_{i,\lambda} = 1$ is chosen for the rectangle to be extended to. The value
+for each $x_{i,\lambda}$ in the rounded solution is at most $4$ times greater
+than its value in the linear-program relaxation solution. This is true since
+for $x_{i,\lambda}$ to be rounded to $1$ it must be the greatest value in the
+linear-program solution which means that its value must have been greater than
+or equal to $\frac{1}{4}$ in order for the condition
+$x_{i,l} + x_{i,r} + x_{i,b} + x_{i,t} \ge 1$ to hold. In the LP solution there
+exists some $c$ such that $\sum_{(i,\lambda) \in P_c} x_{i,\lambda} = Z$ i.e.
+the optimal solution returned by the linear-program relaxation. In the worst
+case, every $x_{i,\lambda}$ in the sumation is rounded to $1$. Since each
+$x_{i,\lambda}$ is a most a factor of $4$ from its LP value and since the
+LP solution is a bound on the OPT solution for the integer linear program, this
+algorithm produces a $4$-approximate solution.
+
+\section*{Problem 4c.}
+Consider the following rounding scheme for the linear programming relaxation of
+the given integer linear program formulation for the problem. For each
+rectangle $r_i$ set one of the four $x_{i,\lambda} = 1$ in the integer solution
+with probability equal to $x_{i,\lambda}$ i.e. their values in the LP solution.
+This produces a feasible solution for the problem because one side, namely
+$\lambda$ such that $x_{i,\lambda} = 1$, is chosen for the rectangle to be
+extended to.
+
+
+\end{document}
