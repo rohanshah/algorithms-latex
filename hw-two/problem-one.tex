@@ -47,11 +47,15 @@ $$\left(\frac{n}{4e\cdot \frac{n}{8e}}\right)^{\frac{n}{8e}} =
 2^{\frac{n}{8e}} = 2^{\Omega(n)}$$
 Since each packet is routed independently at random we can use Chernoff bound to
 show:
-$$\textbf{Pr}[X < \frac{2^{\Omega(n)}}{2}]
-\le \frac{1}{e^{\frac{2^{\Omega(n)}}{8}}}$$
+$$\textbf{Pr}[X < (1-\frac{1}{2})\textbf{E}[X]] =
+\textbf{Pr}[X < \frac{\textbf{E}[X]}{2}] <
+\frac{1}{e^{\textbf{E}[X]\cdot(\frac{1}{2}^2/2)}} =
+\frac{1}{e^{\frac{\textbf{E}[X]}{8}}} =
+\frac{1}{e^{\frac{2^{n/8e}}{8}}}
+$$
 So with high probability, at least $\frac{2^{\Omega(n)}}{2}$ packets pass
-through node $0^n$ so at least $\frac{2^{\Omega(n)}}{2n} = 2^{\Omega(n)}$ steps are
-required to complete the routing.
-
+through node $0^n$. Each node can route at most $n$ packets at any given step so
+at least $\frac{2^{\Omega(n)}}{2n} = 2^{\Omega(n)}$ steps are required to
+complete the routing.
 
 \end{document}

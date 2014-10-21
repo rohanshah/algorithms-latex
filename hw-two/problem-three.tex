@@ -53,32 +53,58 @@ In the LP relaxation of the integer linear program, we can always assign each
 $x_i = \frac{1}{2}$ and subsequently each $z_{ij} = \frac{1}{2}$ without
 breaking any of the conditions of the linear program, thus making
 $\frac{|E|}{2}$ a feasible solution for the linear program and a lower bound on
-its maximization for an instance of the problem. Now consider the following
-graph:
-\newline
-\begin{center}
-\begin{tikzpicture}[shorten >=1pt, node distance=2.5cm, on grid, auto]
-  \node[state] (1) {$1$};
-  \node[state] (2) [right=of 1] {2};
-  \node[state] (3) [below=of 1] {3};
-  \node[state] (4) [below=of 2] {4};
-  \path[->]
-  (1) edge [bend left] (2)
-  (2) edge [bend left] (1)
-  (1) edge [bend left] (3)
-  (3) edge [bend left] (1)
-  (2) edge [bend left] (4)
-  (4) edge [bend left] (2)
-  (3) edge [bend left] (4)
-  (4) edge [bend left] (3)
-  ;
-\end{tikzpicture}
-\end{center}
-Since $|E| = 8$, the LP relaxation of the integer linear program will return
-a maximum directed cut size of at least $4$ but the graph has a maximum
-directed cut of size $2$ thus showing the integrality gap of the relaxation is
-at least $2$.
+its maximization for an instance of the problem. Now consider the a complete
+directed graph with $2n$ nodes. Then the optimal solution for the problem is
+$n^2$. But we know that the LP relaxation can return a solution of size at least
+$\frac{|E|}{2}$ where $|E| = 2n\cdot(2n-1)$. So the LP will return a solution of
+size at least $\frac{2n\cdot(2n-1)}{2} = 2n^2-n$. So the integrality gap is
+$\frac{2n^2-n}{n^2} = 2 - \frac{1}{n}$. This shows that the integrality gap
+of the relaxation is at least $2$ because for any gap of size less than $2$
+we can show a gap larger than that by picking an arbitrarily large $n$ and
+plugging it into the integrality gap we showed which is $2$ at infinity.
 
 \section*{Problem 3d.}
+Let $z_{ij}^*$ be the values returned by the LP solution.
+First, we state the lemma that $z_{ij}^* = \text{min}(x_i, 1-x_j)$ in the
+LP relaxation of the problem. The proof of this is immediate since we attempt
+to maximize each $z_{ij}^*$ while bounding it by those two values.
+Let $z_{ij}$ be the rounded value of $z_{ij}^*$ after we perform the rounding scheme.
+$$\textbf{Pr}[z_{ij} = 1] =
+\textbf{Pr}[x_i \in U]\cdot\textbf{Pr}[x_j \notin U] =
+(\frac{1}{4} + \frac{x_i}{2}) \cdot (1-(\frac{1}{4} + \frac{x_j}{2})) =
+(\frac{1}{4} + \frac{x_i}{2}) \cdot (\frac{3}{4} - \frac{x_j}{2})
+$$
+There are two cases to consider here, when $x_i \le 1-x_j$ and
+$1-x_j \le x_i$. In the first case we can rewrite $x_j$ in terms of $x_i$ as
+$x_j \le 1-x_i $ so we get
+$$\textbf{Pr}[z_{ij} = 1] \ge 
+(\frac{1}{4} + \frac{x_i}{2}) \cdot (\frac{3}{4} - \frac{1-x_i}{2}) =
+\left(\frac{1+2x_i}{4}\right)^2
+$$
+From the above lemma we have that $z_{ij}^* = x_i$ in this case so we get
+$$\textbf{Pr}[z_{ij} = 1] \ge \left(\frac{1+2z_{ij}^*}{4}\right)^2$$
+Consider now the opposite case, $1-x_j \le x_i$. In this case we can rewrite
+$x_i$ in terms of $x_j$ using the inequality directly so we get
+$$\textbf{Pr}[z_{ij} = 1] \ge 
+\left(\frac{3-2x_j}{4}\right)^2
+$$
+But again we have that $z_{ij}^* = 1 - x_j$ by the above lemma so we can rewrite
+$x_j$ in terms of $z_{ij}^*$ as $x_j = 1 - z_{ij}^*$ so we get
+$$\textbf{Pr}[z_{ij} = 1] \ge 
+\left(\frac{3-2(1-z_{ij}^*)}{4}\right)^2 =
+\left(\frac{1+2z_{ij}^*}{4}\right)^2
+$$
+So combining both cases we get
+$$\textbf{Pr}[z_{ij} = 1] \ge 
+2\cdot\left(\frac{1+2z_{ij}^*}{4}\right)^2 \ge
+\frac{z_{ij}^*}{2}
+$$
+Since $z_{ij}$ are $0/1$ random variables we have that $\textbf{E}[z_{ij}] =
+\textbf{Pr}[z_{ij} = 1]$. Let $Z^*$ be the value returned by the LP solution and
+$Z$ be the value returned by the rounded solution. We have that
+$$Z^* = \sum z_{ij}^*$$ and by linearity of expectations we have that
+$$\textbf{E}[Z] = \sum \textbf{E}[z_{ij}] = \sum \frac{z_{ij}^*}{2}$$
+So we have that the solution returned by the rounding scheme is equal to half of
+the LP solution which gives us a 2-approximate solution in expectation.
 
 \end{document}

@@ -21,4 +21,346 @@
 
 \maketitle
 
+\section*{Problem 1.}
+Consider the transpose permutation, where each packet has a source node of
+the form $a_ib_i$ and a destination node of the form $b_ia_i$ where $a_i$
+and $b_i$ are binary strings of length $n/2$. Now consider the
+$2^{n/2}$ packets whose $b_i = 0^{n/2}$. Each such packet has $k$ $1$'s in its
+$a_i$, and equivalently, $k$ $0$'s in its $b_i$ that need to be flipped in order
+for the packet to complete its routing. For some fixed $k$ there are
+${n/2 \choose k}$ such packets. Let $X = X_1 + \cdots + X_{{n/2 \choose k}}$
+where $X_i$ is a binary random variable such that $X_i = 1$ if the $i$-th
+packet of the above form passes through the node $0^n$, for some such fixed $k$.
+Since the algorithm fixes bits in random order, there is only one set of
+selections from the ${2k \choose k}$ possible combinations for the selection of the first $k$ bits
+fixed. Therefore we have
+$$\textbf{Pr}[X_i = 1] = {2k \choose k}^{-1}$$
+Since each $X_i$ are independent binary random variables we have that
+$\textbf{E}[X_i] = \textbf{Pr}[X_i = 1]$ and by the linearity of expectation
+we have
+$$\textbf{E}[X] = \sum_{i=1}^{{n/2 \choose k}} {2k \choose k}^{-1} =
+\frac{{n/2 \choose k}}{{2k \choose k}}$$
+From the given inequalities we have
+$$\left(\frac{n/2}{k}\right)^k \le {n/2 \choose k} \text{ and }
+{2k \choose k} \le \left(\frac{2ke}{k}\right)^k$$
+which gives
+$$\frac{{n/2 \choose k}}{{2k \choose k}} \ge
+\frac{\left(\frac{n/2}{k}\right)^k}{\left(\frac{2ke}{k}\right)^k} =
+\left(\frac{n}{4ek}\right)^k$$
+If we fix $k = \frac{n}{8e}$ then the expected number of packets being routed
+through $0^n$ is at least
+$$\left(\frac{n}{4e\cdot \frac{n}{8e}}\right)^{\frac{n}{8e}} =
+2^{\frac{n}{8e}} = 2^{\Omega(n)}$$
+Since each packet is routed independently at random we can use Chernoff bound to
+show:
+$$\textbf{Pr}[X < (1-\frac{1}{2})\textbf{E}[X]] =
+\textbf{Pr}[X < \frac{\textbf{E}[X]}{2}] <
+\frac{1}{e^{\textbf{E}[X]\cdot(\frac{1}{2}^2/2)}} =
+\frac{1}{e^{\frac{\textbf{E}[X]}{8}}} =
+\frac{1}{e^{\frac{2^{n/8e}}{8}}}
+$$
+So with high probability, at least $\frac{2^{\Omega(n)}}{2}$ packets pass
+through node $0^n$. Each node can route at most $n$ packets at any given step so
+at least $\frac{2^{\Omega(n)}}{2n} = 2^{\Omega(n)}$ steps are required to
+complete the routing.
+
+\section*{Problem 2a.}
+Let $X = X_1 + X_2 + \cdots + X_m$ where $m$ is the number of edges in $G$ and
+$X_i$ is a binary random variable such that $X_i = 1$ if an edge $i$ is in the
+cut and $X_i = 0$ otherwise. Let $i = (u,v)$ for some $u,v \in V$. Then
+$$\textbf{Pr}[X_i = 1] = \textbf{Pr}[u \in S \text{ and } v \in T] \text{ or }
+\textbf{Pr}[v \in S \text{ and } u \in T]$$
+Since the algorithm assigns vertices to $S$ and $T$ independently and with equal
+probability
+$$\textbf{Pr}[X_i = 1] = \textbf{Pr}[u \in S]\cdot\textbf{Pr}[v \in T] +
+\textbf{Pr}[v \in S]\cdot\textbf{Pr}[u \in T] =
+\frac{1}{2}\cdot\frac{1}{2} + \frac{1}{2}\cdot\frac{1}{2} = \frac{1}{2}$$
+Since $X_i$ are independent binary random variables
+$$\textbf{E}[X_i] = \textbf{Pr}[X_i = 1] = \frac{1}{2}$$
+And by the linearity of expectation
+$$\textbf{E}[X] = \sum_{i=1}^m \textbf{E}[X_i] = \frac{m}{2}$$
+Since the upper bound on the optimum solution for MAX-CUT is $m$ this is a
+2-approximation algorithm in expectation.
+
+\section*{Problem 2b.}
+In part (a) each vertex $v$ is placed in $S$ and $T$ independently. We can
+require something weaker, for each vertex to be placed pairwise-independently,
+that is, for any pair of vertices $(u,v)$, $u$ and $v$ are placed in $S$ and $T$
+independently. To show this, consider two edges $i \neq j$ such that
+$i = (u,v)$ and $j = (u,v')$ share an endpoint in $G$. By the definition of
+pairwise-independence, $u$ and $v$ are placed in $S$ and $T$ independently and
+$u$ and $v'$ are also placed in $S$ and $T$ independently. Let $C$ be the cut
+produced by the algorithm. Then $\textbf{Pr}[i \in C] = \textbf{Pr}[j \in C] =
+\frac{1}{2}$ as shown above. In homework one, problem three we showed that $n$
+pairwise independent random variables can be constructed using
+$\lfloor{\log n}\rfloor + 1$ random bits. Consider the following algorithm:
+Assign each of the $n$ constructed pairwise independent random variables,
+$Y_1...Y_n$, to the each of the vertices $v_1...v_n \in V$. Run the algorithm
+from part (a), i.e. place $v_i$ in $S$ if $Y_i = 1$ and in $T$ otherwise.
+We again have a 2-approximate randomized algorithm in expectation for MAX-CUT
+by the analysis above.
+
+\section*{Problem 2c.}
+Consider the algorithm from part (b) as a black box that when fed an
+assignment for the ($\log n$) random bits produces a 2-approximate solution for
+a MAX-CUT problem in expectation. If we enumerate all possible assignments to
+the $\log n$ random bits we can generate $2^{\log n} = n$ solutions for MAX-CUT.
+Since the algorithm produces a 2-approximate solution in expectation if we
+enumerate all possible assignments then we are guarenteed to be given at least
+one 2-approximate solution for the problem. We can then return the largest
+solution output by the algorithm after all $n$ runs as our answer to obtain a
+deterministic 2-approximation algorithm.
+
+\section*{Problem 3a.}
+
+Consider the following randomized algorithm for this problem. Toss a fair coin
+for each vertex $v\in V$, if the coin is heads, place $v$ in $U$, otherwise
+place $v$ in $W$. Output $U$ and $W$ as the partition of $V$. Then an edge
+$(u,w)$ is in the cut C returned by the algorithm if $u\in U$ and $w \in W$.
+Let $X_i$ be a binary random variable such that $X_i = 1$ if an edge
+$i = (u,w) \in C$ and $X_i = 0$ otherwise. The probability that an edge $i$
+is in the cut then is
+$$\textbf{Pr}[X_i = 1] = \textbf{Pr}[u \in U \text{ and } w\in W]$$
+Since any two edges $u \neq w$ are placed into $U$ and $W$ independently at
+random: $$\textbf{Pr}[X_i = 1] = \textbf{Pr}[u \in U]\cdot\textbf{Pr}[w\in W] =
+\frac{1}{2}\cdot\frac{1}{2} = \frac{1}{4}$$
+Since $X_i$ are binary random variables:
+$$\textbf{E}[X_i] = \textbf{Pr}[X_i = 1] = \frac{1}{4}$$
+By linearity of expectation:
+$$\textbf{E}[X] = \sum^m_{i=1} \textbf{E}[X_i] = \frac{m}{4}$$
+Since the upper bound on the optimum solution for a Directed MAX-CUT problem is
+$m$ this algorithm returns a 4-approximate solution in expectation.
+
+\section*{Problem 3b.}
+For each vertex $v_i \in V$ let $x_i = 1$ if $v_i \in U$ and $x_i = 0$ if
+$v_i \in W$. Then for each edge $(i,j) \in E$, $z_{ij}$ can only take a positive,
+non-zero value if $v_i \in U$ and $v_j \in W$. If $v_i \in W$ or $v_j \in U$
+then one of the first two conditions in the integer linear program will cause
+$z_{ij} = 0$. Therefore, the maximation of all $z_{ij}$ occurs only when the number
+of edges of the form $(i,j)$ such that $v_i \in U$ and $v_j \in W$ is maximized,
+which is exactly the maximum directed cut problem. Specifically the maximization
+of $z_{ij}$'s will cause $z_{ij} = 1$ when $(i,j) \in C$ and $z_{ij} = 0$
+otherwise. Therefore the summation of all $z_{ij}$'s will be eqaul to the
+maximum directed cut in $G$.
+
+\section*{Problem 3c.}
+In the LP relaxation of the integer linear program, we can always assign each
+$x_i = \frac{1}{2}$ and subsequently each $z_{ij} = \frac{1}{2}$ without
+breaking any of the conditions of the linear program, thus making
+$\frac{|E|}{2}$ a feasible solution for the linear program and a lower bound on
+its maximization for an instance of the problem. Now consider the a complete
+directed graph with $2n$ nodes. Then the optimal solution for the problem is
+$n^2$. But we know that the LP relaxation can return a solution of size at least
+$\frac{|E|}{2}$ where $|E| = 2n\cdot(2n-1)$. So the LP will return a solution of
+size at least $\frac{2n\cdot(2n-1)}{2} = 2n^2-n$. So the integrality gap is
+$\frac{2n^2-n}{n^2} = 2 - \frac{1}{n}$. This shows that the integrality gap
+of the relaxation is at least $2$ because for any gap of size less than $2$
+we can show a gap larger than that by picking an arbitrarily large $n$ and
+plugging it into the integrality gap we showed which is $2$ at infinity.
+
+\section*{Problem 3d.}
+Let $z_{ij}^*$ be the values returned by the LP solution.
+First, we state the lemma that $z_{ij}^* = \text{min}(x_i, 1-x_j)$ in the
+LP relaxation of the problem. The proof of this is immediate since we attempt
+to maximize each $z_{ij}^*$ while bounding it by those two values.
+Let $z_{ij}$ be the rounded value of $z_{ij}^*$ after we perform the rounding scheme.
+$$\textbf{Pr}[z_{ij} = 1] =
+\textbf{Pr}[x_i \in U]\cdot\textbf{Pr}[x_j \notin U] =
+(\frac{1}{4} + \frac{x_i}{2}) \cdot (1-(\frac{1}{4} + \frac{x_j}{2})) =
+(\frac{1}{4} + \frac{x_i}{2}) \cdot (\frac{3}{4} - \frac{x_j}{2})
+$$
+There are two cases to consider here, when $x_i \le 1-x_j$ and
+$1-x_j \le x_i$. In the first case we can rewrite $x_j$ in terms of $x_i$ as
+$x_j \le 1-x_i $ so we get
+$$\textbf{Pr}[z_{ij} = 1] \ge 
+(\frac{1}{4} + \frac{x_i}{2}) \cdot (\frac{3}{4} - \frac{1-x_i}{2}) =
+\left(\frac{1+2x_i}{4}\right)^2
+$$
+From the above lemma we have that $z_{ij}^* = x_i$ in this case so we get
+$$\textbf{Pr}[z_{ij} = 1] \ge \left(\frac{1+2z_{ij}^*}{4}\right)^2$$
+Consider now the opposite case, $1-x_j \le x_i$. In this case we can rewrite
+$x_i$ in terms of $x_j$ using the inequality directly so we get
+$$\textbf{Pr}[z_{ij} = 1] \ge 
+\left(\frac{3-2x_j}{4}\right)^2
+$$
+But again we have that $z_{ij}^* = 1 - x_j$ by the above lemma so we can rewrite
+$x_j$ in terms of $z_{ij}^*$ as $x_j = 1 - z_{ij}^*$ so we get
+$$\textbf{Pr}[z_{ij} = 1] \ge 
+\left(\frac{3-2(1-z_{ij}^*)}{4}\right)^2 =
+\left(\frac{1+2z_{ij}^*}{4}\right)^2
+$$
+So combining both cases we get
+$$\textbf{Pr}[z_{ij} = 1] \ge 
+2\cdot\left(\frac{1+2z_{ij}^*}{4}\right)^2 \ge
+\frac{z_{ij}^*}{2}
+$$
+Since $z_{ij}$ are $0/1$ random variables we have that $\textbf{E}[z_{ij}] =
+\textbf{Pr}[z_{ij} = 1]$. Let $Z^*$ be the value returned by the LP solution and
+$Z$ be the value returned by the rounded solution. We have that
+$$Z^* = \sum z_{ij}^*$$ and by linearity of expectations we have that
+$$\textbf{E}[Z] = \sum \textbf{E}[z_{ij}] = \sum \frac{z_{ij}^*}{2}$$
+So we have that the solution returned by the rounding scheme is equal to half of
+the LP solution which gives us a 2-approximate solution in expectation.
+
+\section*{Problem 4a.}
+The conditions $x_{i,l} + x_{i,r} + x_{i,b} + x_{i,t} \ge 1$
+and $x_{i,l}, x_{i,r}, x_{i,b}, x_{i,t} \in \{0,1\}$ ensure that
+$\forall 1 \le i \le n$ at least one $x_{i,\lambda} = 1$ which means that at
+least one side of $r_i$ is extended to an edge, so the integer linear program
+will always find a feasible solution to the problem. For each cell $c \in G$ the
+set $P_c$ defines all the rectangles who have the potential to increase the
+density of each point within $c$. Minimizing the number of such rectangles that
+affect a cell once it is determined which side(s) of the rectangle are extended
+is equivalent to minimizing the density for each cell. Minimizing this value for
+every cell in $G$ then is equivalent to finding the minimal maximum density for
+every point which is exactly the problem.
+
+\section*{Problem 4b.}
+Consider the following algorithm. Relax the above integer linear program for the
+problem such that we change the last condition to
+$$0\le x_{i,l}, x_{i,r}, x_{i,b}, x_{i,t} \le 1\ \ \ \ \ \forall 1 \le i \le n$$
+Compute the optimal solution to the linear-program relaxation. Then perform the
+following deterministic rounding scheme: for each $1 \le i \le n$, set the
+$x_{i,\lambda}$ with the greatest value equal to $1$ and $0$ otherwise. This
+rounding scheme always computes a feasible solution for the problem since for
+every rectangle $r_i$ at least one direction $\lambda$ such that
+$x_{i,\lambda} = 1$ is chosen for the rectangle to be extended to. The value
+for each $x_{i,\lambda}$ in the rounded solution is at most $4$ times greater
+than its value in the linear-program relaxation solution. This is true since
+for $x_{i,\lambda}$ to be rounded to $1$ it must be the greatest value in the
+linear-program solution which means that its value must have been greater than
+or equal to $\frac{1}{4}$ in order for the condition
+$x_{i,l} + x_{i,r} + x_{i,b} + x_{i,t} \ge 1$ to hold. In the LP solution there
+exists some $c$ such that $\sum_{(i,\lambda) \in P_c} x_{i,\lambda} = Z$ i.e.
+the optimal solution returned by the linear-program relaxation. In the worst
+case, every $x_{i,\lambda}$ in the sumation is rounded to $1$. Since each
+$x_{i,\lambda}$ is a most a factor of $4$ from its LP value and since the
+LP solution is a bound on the OPT solution for the integer linear program, this
+algorithm produces a $4$-approximate solution.
+
+\section*{Problem 4c.}
+Consider the following rounding scheme for the linear programming relaxation of
+the given integer linear program formulation for the problem. For each
+rectangle $r_i$ set one of the four $x_{i,\lambda} = 1$ in the integer solution
+with probability equal to $x_{i,\lambda}$ i.e. their values in the LP solution.
+This produces a feasible solution for the problem because one side, namely
+$\lambda$ such that $x_{i,\lambda} = 1$, is chosen for the rectangle to be
+extended to. Now consider the LP solution: there is some $c$ such that
+$\sum_{(i,\lambda) \in P_c} x_{i,\lambda} = Z^*$. In our rounding scheme we
+have
+$$\textbf{Pr}[x_{i,\lambda} \text{ is rounded to } 1] = x_{i,\lambda}$$
+Since these rounded $x_{i,\lambda}$ are binary random variables their
+expectation is equal to the probability they are assigned $1$ so by the linearity
+of expectations the value of the solution after the rounding scheme is equal to
+the value of the LP solution $X^*$. Now we can use Chernoff bound to show that
+with high probability the value of the rounded solution does not deviate from
+the expected value by more than $\sqrt{O(Z^*\log n)}$.
+
+\section*{Problem 5a.}
+\textbf{Theorem:} The function $M(x)$ is well-defined for all $x\in\{0,1\}^+$
+(non-empty strings).
+\newline
+\textbf{Proof:} By straightforward induction on the length of $x$. In the base
+case $|x| = 1$ therefore $x = 0$ or $x = 1$ where both $M(0)$ and $M(1)$ are
+well-defined. In the inductive case we can write $x$ as $x = x'y$ where
+$|x'| = n-1$ and $y\in \{0,1\}$. Then $M(x) = M(x'y) = M(x') \times M(y)$ by
+definition where $M(y) = M(0) \text{ or } M(1)$ are both well-defined and
+$M(x')$ is well-defined by the induction hypothesis. Thus, $M(x)$ is the product
+of two $2 \times 2$ matrices which is well-defined.
+\vspace{2mm}
+\newline
+\textbf{Theorem:} $M(x) = M(y) \Rightarrow x = y$.
+\newline
+\textbf{Proof:} First we define the inverse map function $M^{-1}(x)$ for
+$x \in \{0,1\}$ as
+$$M^{-1}(0) = \left(\begin{array}{cc} 1 & 0 \\ -1 & 1 \end{array}\right)
+\text{ and } M^{-1}(1) = \left(\begin{array}{cc} 1 & -1 \\ 0 & 1 \end{array}\right)$$
+Such that $M(x\cdot0)\times M^{-1}(0) = M(x)$ and $M(x\cdot1)\times M^{-1}(1) = M(x)$
+by the associativity of multiplication and the definition of an inverse matrix.
+Now, given a bit string $x$ we can uniquely determine that last bit that was used
+to construct $M(x)$. Let $x = x'y$ such that $|x| \ge 0$ and $y\in\{0,1\}$. Then
+$M(x) = M(x'y) = M(x') \times M(y)$ where 
+$$M(x') \times M(0) =
+\left(\begin{array}{cc} a & b \\ c & d \end{array}\right) \times
+\left(\begin{array}{cc} 1 & 0 \\ 1 & 1 \end{array}\right) =
+\left(\begin{array}{cc} a+b & b \\ c+d & d \end{array}\right)$$
+$$M(x') \times M(1) =
+\left(\begin{array}{cc} a & b \\ c & d \end{array}\right) \times
+\left(\begin{array}{cc} 1 & 1 \\ 0 & 1 \end{array}\right) =
+\left(\begin{array}{cc} a & a+b \\ c & c+d \end{array}\right)$$
+We see that if for a matrix of the form 
+$\left(\begin{array}{cc} a' & b' \\ c' & d' \end{array}\right)$ that if
+$a' \ge b'$ and $c' \ge d'$ then the last bit in $x$ was a $0$ and if
+the opposite occurs, $b' \ge a'$ and $d' \ge c'$ then the last bit $x$ was
+a $1$. The proof that both these events cannot occur simultaneously is by
+straightforward induction on the input $x$ where the base case is immediate and
+the inductive case is shown by the fact that in either case one side of the
+matrix remains constant while the other side increases specifically related
+to whether or not the last bit was a $0$ or $1$ which means that for at least
+one pair of adjacent entries, one entry is strictly greater than the other which
+again allows us to uniquely determine the last bit. Since this is the case we can
+then perform the following algorithm to generate a unique input string $x$ given
+a matrix $M(x)$: Uniquely determine whether the last bit used to generate $M(x)$
+was a $0$ or $1$ and record this concatenated with the string generated by
+performing the algorithm on the matrix $M(x'y)M^{-1}(y) = M(x')$ where $y$ is
+the unqiue $0/1$ bit at the end of $x$. Since each bit in the output is determined
+uniquely, only one input string could generate the given output matrix therefore
+the mapping function is injective.
+\vspace{2mm}
+\newline
+\textbf{Theorem:} For every $x \in \{0,1\}^n$, the entries of $M(x)$ are bounded
+by Fibonacci number $F_n$.
+\newline
+\textbf{Proof:} By straightforward induction on $n$. In the base case $n = 1$ so
+$x = 0$ or $x = 1$ where the entries of $M(0)$ and $M(1)$ are bound by $F_1 = 1$.
+In the inductive case, $x = x'y$ where $|x'| = n-1$ and $y \in \{0,1\}$. Let
+$$M(x') = \left(\begin{array}{cc} a & b \\ c & d \end{array}\right)$$
+The entries in $M(x')$ are bound by the Fibonacci number $F_{n-1}$ by the
+induction hypothesis. Then we have
+$M(x) = M(x'y) = M(x') \times M(y)$ with $y\in \{0,1\}$ so we have
+$$M(x') \times M(0) =
+\left(\begin{array}{cc} a & b \\ c & d \end{array}\right) \times
+\left(\begin{array}{cc} 1 & 0 \\ 1 & 1 \end{array}\right) =
+\left(\begin{array}{cc} a+b & b \\ c+d & d \end{array}\right)$$
+$$M(x') \times M(1) =
+\left(\begin{array}{cc} a & b \\ c & d \end{array}\right) \times
+\left(\begin{array}{cc} 1 & 1 \\ 0 & 1 \end{array}\right) =
+\left(\begin{array}{cc} a & a+b \\ c & c+d \end{array}\right)$$
+By the induction hypothesis the $a,b,c, \text{ and } d$ entries are bound by
+$F_{n-1}$ so they are also bound by $F_n$. To show that $a+b$ and $c+d$ entries
+are also bound by $F_n$ we can see that either $a$ or $b$ and either $c$ or $d$
+remain unchanged when a binary string is concatenated with either $0$ or $1$.
+By the induction hypothesis, in step $n-2$, $a, b, c, \text{ and } d$ were bound
+by $F_{n-2}$ and in the $n-1$ step either $a \text{ and } c \text{ or }
+b \text{ and } d$ remained unchanged and thus remained bound by $F_{n-2}$.
+Therefore $a+b$ and $c+d$ are bound by $F_{n-1} + F_{n-2}$ which means they are
+also bound by $F_n = F_{n-1} + F_{n-2}$.
+
+\section*{Problem 5b.}
+Consider the following randomized algorithm for pattern matching problem
+described in the problem statement. Select a prime $p$ from the range $[1...T]$
+where $T$ will be determined later. Compute $M(y)\mod p$ in $O(m)$ time. Now
+for each consequetive substring of length $m$ in $x$, call it $x'$, compute
+$M(x')\mod p$. There are at most $n$ such substrings. We can compute all
+$n$ of these $M(x')$ in $O(n)$ time by observing that each substring differs in
+only the first and last bit. So if we have two consequetive substrings $x'_1$
+and $x'_2$ then $x'_1 = yx'$ and $x'_2 = x'z$ where $y,z\in\{0,1\}$. Then
+we can compute $M(x'_2)$ from $M(x'_1)$ by using the inverse functions defined
+above in the following way: $M(x'_2) = M^{-1}(y)\cdot M(x'_1)\cdot M(z)$. Since
+each of those operations can be done in constant time and we perform it for each
+$m$ length substring of $x$ we can get all the value modulo p in $O(n)$ time
+total. Then we compare the fingerprint of $y$ to the fingerprint of each
+substring of $x$ and if any of them match return YES otherwise return NO. In
+the case where $y$ is in fact a substring $x$ we always return YES correctly. But
+we may err on the side where $y$ is not a substring of $x$ but we return YES
+anyways. Let us determine the probability that this occurs i.e.
+$\textbf{Pr}[M(x_i)\mod p = M(y)\mod p \mid M(x_i) \neq M(y)]$.
+Let's define a difference matrix $C = |M(x_i)-M(y)|$.
+Then we return an incorrect solution only if $C \neq 0$ but $C \mod p = 0$. Since
+$M(x_i)$ and $M(y)$ are bound by $F_m$ so is $C$. So then there are at most
+$\log F_m$ prime divisors of $C$. But $F_m$ is bound by $2^m$ so $C$ has at most
+$m$ prime divisors. So let $T = m^2\log m$. Then there are $\Omega(m^2)$ primes
+in the interval $[1...T]$ of which at most $m$ of these can divide $C$ so
+$\textbf{Pr}[M(x_i)\mod p = M(y)\mod p \mid M(x_i) \neq M(y)] \le \frac{1}{m}$.
+
 \end{document}
