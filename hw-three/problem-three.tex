@@ -1,0 +1,50 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{titlesec}
+\usepackage{tikz}
+\usepackage{amsfonts,amssymb}
+\usepackage{amsmath}
+\usepackage{comment}
+\relpenalty=9999
+\binoppenalty=9999
+
+\begin{document}
+\pagestyle{plain}
+\titleformat{\subsection}[runin]
+  {\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}[runin]
+  {\normalfont\large\bfseries}{\thesubsubsection}{1em}{}
+
+\section*{Problem 3.}
+Consider a satisfying 3-coloring assignment $A$ of the graph $G$ using the
+colors red, blue, and green. Any triangle must have each of its vertices
+colored differently. Now consider a relaxed 2-coloring assignment $A'$ where
+every green vertex in $A$ is arbitrarily colored either red or blue. $A'$
+still satisfies the constraint that no triangle is monocromatic. The proof of
+this is straightforward. Every triangle contains a red, blue, and green vertice
+in $A$. Changing all the green vertices in $A$ to be either red or blue means
+that there is still at least one red and at least one blue vertice in every
+triangle since the original red and blue vertices remained unchanged from $A$ to
+$A'$. Fix such a coloring $A'$ and consider the following algorithm.
+Arbitrarily assign a 2-coloring to the graph $G$. While there remain
+mono-cromatic triangles in $G$, arbitrarily select one, randomly choose one of
+its vertices and flip its color. We repeat until every vertice in a triangle has
+the color assigned to it in $A'$ (or until we satisfy the constraint, which we
+know at least happens when our coloring matches $A'$). We know from above that
+each triangle in $G$ has one vertice who's color must be blue, one vertice who's
+color must be red and one vertice who's color does not matter (the vertice who's
+color would have been green in the 3-coloring $A$ of the graph). Therefore, the
+probability that we choose a correctly colored vertice and flip its color is
+equal to the probability that we choose an incorrectly colored vertice and flip
+its color which is equal to the probability we choose a vertice who's coloring does
+not affect the constraint satisfaction which is equal to $1/3$. We can model
+this algorithm as the random walk of a path graph defined in the following way:
+each vertex $v_i$ has an edge to vertex $v_{i-1}$, $v_{i+1}$, and a self loop
+each with an associated probability of $1/3$. Being at a vertice $v_i$ corresponds
+to $i$ vertices in $G$ being correctly colored according to our satisfying assignment $A'$.
+We have a path of length at most $n$ since we only need to consider the vertices who are
+members of a triangle, which is at most all the vertices in $G$. The cover time
+of our path graph is at most $2\cdot(3n)\cdot(n-1) = 6n^2+6n$ steps, therefore
+our algorithm takes $O(n^2)$ expected running time.
+
+\end{document}

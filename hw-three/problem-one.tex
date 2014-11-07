@@ -1,0 +1,53 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{titlesec}
+\usepackage{tikz}
+\usepackage{amsfonts,amssymb}
+\usepackage{amsmath}
+\usepackage{comment}
+\relpenalty=9999
+\binoppenalty=9999
+
+\begin{document}
+\pagestyle{plain}
+\titleformat{\subsection}[runin]
+  {\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}[runin]
+  {\normalfont\large\bfseries}{\thesubsubsection}{1em}{}
+
+\section*{Problem 1.}
+Consider the following protocol. Alice and Bob each select $\sqrt{4n}$ primes
+at random from the first $2n$ primes i.e. from the range $[1...\tau]$ where
+$\tau = 2n\log{n}$ which by the Prime Density Theorem has $\Theta(2n)$
+primes. Both Alice and Bob compute $F_p(A)$ and $F_p(B)$, respectively, for
+each of the $\sqrt{4n}$ primes they selected. Alice and Bob then send all of their
+respective fingerprints and primes to Charlies. Note: The number of bits
+each person sends to Charlie is $\sqrt{4n}\cdot O(\log{n})$. Proof: Since
+$\tau = n^{O(1)}$ each prime and fingerprint can be represented by
+$O(\log{n})$ bits. Finally, Charlie compares $F_{p'}(A)$ and $F_{p'}(B)$ for
+some prime $p'$ that is shared by both Alice and Bob. If $F_{p'}(A) = F_{p'}(B)$
+or if there does not exist some $p'$ that both Alice and Bob share then Charlie
+does nothing and the protocol is repeated, otherwise Charlie outputs NO and the
+protocol terminates. The protocol is repeated $(\log{n})^{O(1)}$ times after
+which Charlie outputs YES. Note that the totalnumber of bits exchanced is at most
+$(\log{n})^{O(1)} \cdot \sqrt{4n}\cdot O(\log{n}) = \sqrt{4n}(\log n)^{O(1)}$
+as required. The analysis for this protocol consists of two parts:
+the probability of a false positive and the probability that Alice and Bob share
+a prime during each iteration of the protocol. For the first, we are looking for
+$\textbf{Pr}[F_{p'}(A) = F_{p'}(B) \mid A \neq B]$. Define $C = |A-B|$. There
+is a false positive if $C \neq 0$ but $F_{p'}(C) = 0$ i.e. $p'$ is a prime divisor
+of $C$. There are at most $n$ prime divisors of $C$ and we are randomly chosing
+from the first $2n$ primes so the probability that $p'$ is a prime divisor of
+$C$ is $\frac{n}{2n} = \frac{1}{2}$. But since we repeat the protocol
+$(\log{n})^{O(1)}$ times, the probability that a false positive occurs during
+each repetition is $\frac{1}{2}^{(\log{n})^{O(1)}} = \frac{1}{n^{O(1)}}$. So
+the probability that Charlie outputs correctly is $1-1/\text{poly}(n)$. Now
+we show the probability that Alice and Bob share a prime during each iteration
+is high. Consider the probability that Bob does not randomly select any of the
+same primes as Alice in an iteration; Bob must choose from one of the
+$2n-\sqrt{4n} \choose \sqrt{4n}$ sets that do not include any of the
+$\sqrt{4n}$ primes Alice chose. The probability that this occurs is then
+$\frac{{2n-\sqrt{4n} \choose \sqrt{4n}}}{{2n \choose \sqrt{4n}}}$
+(which asymptotes around $.135$). So with high probility, Alice and Bob
+choose at least one prime in common during each iteration of the protocol.
+\end{document}
