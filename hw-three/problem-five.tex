@@ -16,6 +16,19 @@
   {\normalfont\large\bfseries}{\thesubsubsection}{1em}{}
 
 \section*{Problem 5a.}
+Consider the following algorithm for computing $\lambda(v)$ for all vertices in
+$V$. Sort all the $r(u)$ values from least to greatest. Let $R_G = (V, R_E)$ be
+the reverse graph of $G$ such that $R_E = \{(v,u) \mid (u,v) \in E \}$. Perform
+a depth-first search from $u$ in $R_G$ where $u$ is the vertex with the least
+$r(u)$ value. For every vertex $v$ reachable from $u$ we set $\lambda(v) = r(u)$
+and increment a counter on $v$ which is initialized at $0$. This process is then
+repeated using the next smallest $r(u')$. When a vertex $v$'s counter reaches
+$t$ we output its $\lambda(v)$ and break all incoming edges to $v$ in $R_G$.
+Clearly, once a vertex's counter reaches $t$ we have found its $\lambda(v)$
+since we've seen the first $t$ smallest $r(u)$ values in $S(v)$. In this
+algorithm every vertex is seen at most $t$ times and every edge is traveresed at
+most $t$ times since it is broken after its $t$'th traversal. So the algorithm
+runs in $O(m\cdot t + n\cdot t) = O((m +n)t)$ time.
 
 \section*{Problem 5b.}
 Consider the two inequalites seperately. The first inequality
@@ -41,12 +54,31 @@ bound the probability of failure using Chernoff Bounds
 $$\textbf{Pr}[X < t] = \textbf{Pr}[X < (1-\epsilon)\cdot\frac{t}{(1-\epsilon)}]=
 \textbf{Pr}[X < (1-\epsilon)\cdot\textbf{E}[X]] <
 \frac{1}{n^{\frac{18}{(1-\epsilon)}}}$$
-So with probability $1-1/\text{poly}(n)$ the first inequality holds. The second
-inequality
+So with probability $1-1/\text{poly}(n)$ the first inequality holds.
+The second inequality
 $$ (1+\epsilon)|S(v)| \ge \frac{n\cdot t}{\lambda(v)} $$
-is symmetrical and the probability of failure can similarly be bounded using
-Chernoff Bounds to be $1-1/\text{poly}(n)$. So with probability
-$1-1/\text{poly}(n)$ the algorithm returns a $(1 \pm \epsilon)$ estimate of
-$S(v)$.
+can be rewritten as
+$$ \lambda(v) \ge \frac{n\cdot t}{(1+\epsilon)|S(v)|} $$
+Clearly the inequality fails when there are more than $t$ such
+$r(u)$'s less than $\frac{n\cdot t}{(1+\epsilon)|S(v)|}$. Let
+$X = X_1 + \cdots + X_{|S(v)|}$ be the sum of binary independent random variables
+such that $X_i = 1$ if $r(u_i) < \frac{n\cdot t}{(1+\epsilon)|S(v)|}$ where
+$u_i$ is an element of $S(v)$. Since each $v \in V$ is assigned a value $r(v)$
+from $\{1...n\}$ uniformly at random, $X_i$ is a binary independent random
+variable. Therefore
+$$\textbf{E}[X_i] = \textbf{Pr}[X_i = 1] =
+\frac{\frac{n\cdot t}{(1+\epsilon)|S(v)|}}{n} =
+\frac{t}{(1+\epsilon)|S(v)|}$$
+By the linearity of expectation we have
+$$\textbf{E}[X] = \frac{t}{(1+\epsilon)|S(v)|}\cdot |S(v)| =
+\frac{t}{(1+\epsilon)}$$
+From above, we need $X$ to be greater than $t$ for the inequality to fail. We
+can again bound the probability of failure using Chernoff Bounds
+$$\textbf{Pr}[X > t] = \textbf{Pr}[X > (1+\epsilon)\cdot\frac{t}{(1+\epsilon)}]=
+\textbf{Pr}[X > (1+\epsilon)\cdot\textbf{E}[X]] <
+\frac{1}{n^{\frac{9}{(1+\epsilon)}}}$$
+So with probability $1-1/\text{poly}(n)$ the second inequality also holds.
+So with probability $1-1/\text{poly}(n)$ the algorithm returns a
+$(1 \pm \epsilon)$ estimate of $S(v)$.
 
 \end{document}
