@@ -23,30 +23,31 @@ Charlie compares $F_{p'}(A)$ and $F_{p'}(B)$ for some prime $p'$ that both
 Alice and Bob share. If $F_{p'}(A) = F_{p'}(B)$ or if there does not exist some
 prime $p'$ that both Alice and Bob share then Charlie does nothing and the
 protocol is repeated, otherwise Charlie outputs NO and the protocol terminates.
-The protocol is repeated $(\log{n})^{100}$ times after which Charlie outputs YES.
+The protocol is repeated $(\log{n})^{O(1)}$ times after which Charlie outputs YES.
 The total number of bits Alice (and Bob) send to Charlie is roughly
 $\sqrt{n}(\log{n})^{O(1)}$ since each of the $\sqrt{4n}$ primes and fingerprints
 are represented by $O(\log{n})$ bits and the protocol is repeated only
-$(\log{n})^{100}$ times. Clearly, if $A = B$, Charlie always outputs YES
+$(\log{n})^{O(1)}$ times. Clearly, if $A = B$, Charlie always outputs YES
 correctly. However, if $A \neq B$, Charlie may output YES if either,
 $F_{p'}(A) = F_{p'}(B)$ in every iteration or if Alice and Bob never share
-a prime. For the first, we are looking for
+a prime. The first case case occurs with probability
 $$\textbf{Pr}[F_{p'}(A) = F_{p'}(B) \mid A \neq B]$$
 Define $C = |A-B|$. The above occurs only if $C \neq 0$ and $F_{p'}(C) = 0$
 i.e. $p'$ is a prime divisor of $C$. Since there are at most $n$ prime divisors
 of $C$ and Alice (and Bob) randomly chose from $2n$ primes, the probability
 that $p'$ is a prime divisor of $C$ is $\frac{n}{2n} = \frac{1}{2}$.
-The protocol is repeated $(\log{n})^{100}$ times, so the probability this false
-positive occurs during each iteration is $\frac{1}{2}^{(\log{n})^{100}}$. For
-the second false postive case we show that the probability that Alice and Bob
-never share a prime is low. Consider the probability that Bob does not randomly
+The protocol is repeated $(\log{n})^{O(n)}$ times, so the probability this false
+positive occurs during each iteration is $\frac{1}{2}^{(\log{n})^{O(1)}}$.
+For the second false postive case we show that the
+probability that Alice and Bob never share a prime is low. Consider the
+probability that Bob does not randomly
 select any of the same primes as Alice in a single iteration; Bob must have
 chosen one of the $2n-\sqrt{4n} \choose \sqrt{4n}$ sets of primes that do not
 include any of the $\sqrt{4n}$ primes Alice chose. The probability that this
 occurs is
 $$\frac{{2n-\sqrt{4n} \choose \sqrt{4n}}}{{2n \choose \sqrt{4n}}} << \frac{1}{2} $$
-Again since the protocol is repeated $(\log{n})^{100}$ times the probability
+Again since the protocol is repeated $(\log{n})^{O(1)}$ times the probability
 that Alice and Bob never share a prime is much less than
-$\frac{1}{2}^{(\log{n})^{100}}$. So the probability that Charlie outputs
-correctly is $1-1/\text{poly}(n)$.
+$\frac{1}{2}^{(\log{n})^{O(1)}}$. So the probability that
+Charlie outputs correctly is $1-1/\text{poly}(n)$.
 \end{document}
