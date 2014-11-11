@@ -17,23 +17,20 @@
 
 \section*{Problem 3.}
 Consider a satisfying 3-coloring assignment $A$ of the graph $G$ using the
-colors red, blue, and green. Any triangle must have each of its vertices
-colored differently. Now consider a relaxed 2-coloring assignment $A'$ where
-every green vertex in $A$ is arbitrarily colored either red or blue. $A'$
-still satisfies the constraint that no triangle is monocromatic. The proof of
-this is straightforward. Every triangle contains a red, blue, and green vertice
-in $A$. Changing all the green vertices in $A$ to be either red or blue means
-that there is still at least one red and at least one blue vertice in every
-triangle since the original red and blue vertices remained unchanged from $A$ to
-$A'$. Fix such a coloring $A'$ and consider the following algorithm.
-Arbitrarily assign a 2-coloring to the graph $G$. While there remain
-mono-cromatic triangles in $G$, arbitrarily select one, randomly choose one of
+colors red, blue, and green. Every triangle in $G$ must have all its vertices
+colored differently by the definition of a 3-coloring. Now consider a relaxed
+2-coloring assignment $A'$ where every green vertex in $A$ is arbitrarily
+colored either red or blue. $A'$ satisfies the constraint that no triangle is
+monocromatic. Every triangle contains a red, blue, and green vertice in $A$
+therefore every triangle contains at least one red and one blue triangle in $A'$.
+Fix such an assignment $A'$ and consider the following algorithm. Arbitrarily
+assign a 2-coloring to the graph $G$. While there remain monocromatic triangles
+in $G$, arbitrarily select one, randomly choose one of
 its vertices and flip its color. We repeat until every vertice in a triangle has
-the color assigned to it in $A'$ (or until we satisfy the constraint, which we
-know at least happens when our coloring matches $A'$). We know from above that
-each triangle in $G$ has one vertice who's color must be blue, one vertice who's
+the color assigned to it in $A'$. We know from above that each triangle in $G$
+has one vertice who's color must be blue, one vertice who's
 color must be red and one vertice who's color does not matter (the vertice who's
-color would have been green in the 3-coloring $A$ of the graph). Therefore, the
+color would have been green in the 3-coloring of the graph). Therefore, the
 probability that we choose a correctly colored vertice and flip its color is
 equal to the probability that we choose an incorrectly colored vertice and flip
 its color which is equal to the probability we choose a vertice who's coloring does
