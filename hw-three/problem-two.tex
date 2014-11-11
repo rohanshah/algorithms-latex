@@ -18,12 +18,13 @@
 \section*{Problem 2.}
 Consider the following strategy for the hunter to catch the rabbit in
 expected polynomial time. The hunter chooses a vertex $v$ uniformly at random,
-takes the shortest path to $v$ of length $l$ and waits at $v$ for $n-l$ time
-steps i.e. each round takes $n$ time steps total. Since the rabbit has no
-knowledge of the starting position of the hunter, the probability that the
-hunter chose the vertex that the rabbit would be at at time $n$ is $\frac{1}{n}$.
-Therefore, in expectation, the hunter will have correctly guessed the position
-that the rabbit will be at after $n$ rounds. Since each round takes $n$ time
-steps the total number of expected time steps is $n^2$.
+takes the shortest path to $v$ of length $l$ and waits at $v$ for $d-l$ time
+steps where $d$ is the diameter of $G$. By waiting $d$ time steps the rabbit
+can have no knowledge of the hunter's position since the hunter could be at any
+node after $d$ time. The probability that the hunter chose the vertex that the
+rabbit would be at at time $d$ is $\frac{1}{n}$. Therefore, in expectation, the
+hunter will have correctly guessed the position that the rabbit will be at after
+$n$ rounds. Since each round takes $n$ time steps the total number of expected
+time steps is $\text{poly}(n)$.
 
 \end{document}
