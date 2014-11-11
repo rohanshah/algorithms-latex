@@ -1,0 +1,47 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{titlesec}
+\usepackage{tikz}
+\usepackage{amsfonts,amssymb}
+\usepackage{amsmath}
+\usepackage{comment}
+\relpenalty=9999
+\binoppenalty=9999
+
+\begin{document}
+\pagestyle{plain}
+\titleformat{\subsection}[runin]
+  {\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}[runin]
+  {\normalfont\large\bfseries}{\thesubsubsection}{1em}{}
+
+\section*{Problem 4.}
+Consider a directed path graph of length $k$ such that every vertex $v_i$ in the
+path has an edge to vertices $v_0$ to $v_{i-1}$ and an edge to $v_{i+i}$. Then
+we have $h_{i(i+1)} = i \cdot h_{(i-1)i}$ since the number of edges out of $v_i$
+is $i+1$, $i$ of which move away from $v_{i+1}$, the edge $(i-1, i)$ will be
+traveresed $i$ times in expectation before the edge $(i,i+1)$ is traversed. The
+base case $h_{01} = 1$ by the definition of the graph. So inductively we have
+$h_{0k} = k!$. Now consider an arbitrary graph $G$ and consider a vertex
+$u$ as a starting vertex for a random walk. Partition the graph into two
+sets $S$ and $T$ such that initially only $u$ is in $S$ and every other vertex
+is in $T$. We perform random walks from $S$ to $T$ and once a vertex in $T$ is
+reached we add it to $S$. There is always at least one edge from $S$ to $T$ since
+the graph is strongly connected. Fix a path from $S$ to $T$. In the worst case
+we need to traverse every vertex in $S$ before reaching $T$. Above we showed that
+our hitting time for a directed path graph can be $k!$. We have covered $G$
+only when every vertex is in $S$ and no vertex is in $T$. Given that $S$ increases
+by one vertex at a time, in the worst case the cover time of $G$ is the hitting
+time from $S$ to $T$ for each $n-1$ vertices in $T$ which is equal to
+$$\sum_{k=1}^{n} k! < (n+1)!$$
+Consider a lollipop graph where the candy is a clique of size $\frac{n}{2}$ and
+the stem is a path graph such that each vertex in the path has an edge to every
+node in the clique. Let $u$ be the vertex that connects the clique to the
+path and $v$ be the edge at the end of the path. The hitting time $h_{uv}$ is
+again defined as the product of each edge's hitting time in the path. Since
+each edge in the path has an edge to every vertex in the clique, the hitting time
+of taking an edge $(i,i+1)$ in the path is slightly more than $\frac{n}{2}$.
+Since there are $\frac{n}{2}$ edges in the path,
+$h_{uv} = \frac{n}{2}^{\frac{n}{2}}$ which is $n^{\Omega(n)}$.
+
+\end{document}
