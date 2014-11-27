@@ -21,5 +21,176 @@
 
 \maketitle
 
+\section*{Problem 1.}
+Consider the following protocol: Alice (and Bob) randomly selects $\sqrt{4n}$
+primes from the first $2n$ primes, computes $F_p(A)$ (and $F_p(B)$ respectively),
+for each prime, and sends the fingerprints and primes to Charlie.
+Charlie compares $F_{p'}(A)$ and $F_{p'}(B)$ for some prime $p'$ that both
+Alice and Bob share. If $F_{p'}(A) = F_{p'}(B)$ or if there does not exist some
+prime $p'$ that both Alice and Bob share then Charlie does nothing and the
+protocol is repeated, otherwise Charlie outputs NO and the protocol terminates.
+The protocol is repeated $(\log{n})^{O(1)}$ times after which Charlie outputs YES.
+The total number of bits Alice (and Bob) send to Charlie is roughly
+$\sqrt{n}(\log{n})^{O(1)}$ since each of the $\sqrt{4n}$ primes and fingerprints
+are represented by $O(\log{n})$ bits and the protocol is repeated only
+$(\log{n})^{O(1)}$ times. Clearly, if $A = B$, Charlie always outputs YES
+correctly. However, if $A \neq B$, Charlie may output YES if either,
+$F_{p'}(A) = F_{p'}(B)$ in every iteration or if Alice and Bob never share
+a prime. The first case case occurs with probability
+$$\textbf{Pr}[F_{p'}(A) = F_{p'}(B) \mid A \neq B]$$
+Define $C = |A-B|$. The above occurs only if $C \neq 0$ and $F_{p'}(C) = 0$
+i.e. $p'$ is a prime divisor of $C$. Since there are at most $n$ prime divisors
+of $C$ and Alice (and Bob) randomly chose from $2n$ primes, the probability
+that $p'$ is a prime divisor of $C$ is $\frac{n}{2n} = \frac{1}{2}$.
+The protocol is repeated $(\log{n})^{O(n)}$ times, so the probability this false
+positive occurs during each iteration is $\frac{1}{2}^{(\log{n})^{O(1)}}$.
+For the second false postive case we show that the
+probability that Alice and Bob never share a prime is low. Consider the
+probability that Bob does not randomly
+select any of the same primes as Alice in a single iteration; Bob must have
+chosen one of the $2n-\sqrt{4n} \choose \sqrt{4n}$ sets of primes that do not
+include any of the $\sqrt{4n}$ primes Alice chose. The probability that this
+occurs is
+$$\frac{{2n-\sqrt{4n} \choose \sqrt{4n}}}{{2n \choose \sqrt{4n}}} << \frac{1}{2} $$
+Again since the protocol is repeated $(\log{n})^{O(1)}$ times the probability
+that Alice and Bob never share a prime is much less than
+$\frac{1}{2}^{(\log{n})^{O(1)}}$. So the probability that
+Charlie outputs correctly is $1-1/\text{poly}(n)$.
+
+\section*{Problem 2.}
+Consider the following strategy for the hunter to catch the rabbit in
+expected polynomial time. The hunter chooses a vertex $v$ uniformly at random,
+takes the shortest path to $v$ of length $l$ and waits at $v$ for $d-l$ time
+steps where $d$ is the diameter of $G$. By waiting $d$ time steps the rabbit
+can have no knowledge of the hunter's position since the hunter could be at any
+node after $d$ time. The probability that the hunter chose the vertex that the
+rabbit would be at at time $d$ is $\frac{1}{n}$. Therefore, in expectation, the
+hunter will have correctly guessed the position that the rabbit will be at after
+$n$ rounds. Since each round takes $n$ time steps the total number of expected
+time steps is $\text{poly}(n)$.
+
+\section*{Problem 3.}
+Consider a satisfying 3-coloring assignment $A$ of the graph $G$ using the
+colors red, blue, and green. Every triangle in $G$ must have all its vertices
+colored differently by the definition of a 3-coloring. Now consider a relaxed
+2-coloring assignment $A'$ where every green vertex in $A$ is arbitrarily
+colored either red or blue. $A'$ satisfies the constraint that no triangle is
+monocromatic. Every triangle contains a red, blue, and green vertice in $A$
+therefore every triangle contains at least one red and one blue triangle in $A'$.
+Fix such an assignment $A'$ and consider the following algorithm. Arbitrarily
+assign a 2-coloring to the graph $G$. While there remain monocromatic triangles
+in $G$, arbitrarily select one, randomly choose one of
+its vertices and flip its color. We repeat until every vertice in a triangle has
+the color assigned to it in $A'$. We know from above that each triangle in $G$
+has one vertex who's color must be blue, one vertex who's color must be red and
+one vertice who's color does not matter (i.e. the green vertex). Therefore, the
+probability that we choose a correctly colored vertice and flip its color is
+$\frac{1}{3}$. The probability that we choose an incorrectly colored vertice and
+flip its color is $\frac{1}{3}$. And the probability that we choose a vertice
+who's coloring does not affect the monocromatic triangle constraint is $\frac{1}{3}$.
+We can model this algorithm as the random walk of a path graph defined in the
+following way: each vertex $v_i$ has an edge to vertex $v_{i-1}$, $v_{i+1}$,
+and a self loop each with equal probability of being traversed. Being at a
+vertice $v_i$ corresponds to $i$ vertices in $G$ being correctly colored
+according to our satisfying assignment $A'$. We have a path of length at most
+$n$ since we only need to consider the vertices who are members of a triangle,
+which is at most all the vertices in $G$. The cover time of our path graph is at
+most $2\cdot(3n)\cdot(n-1) = 6n^2+6n$ steps, therefore our algorithm takes
+$O(n^2)$ expected running time.
+
+\section*{Problem 4.}
+Consider a directed path graph of length $k$ such that every vertex $v_i$ in the
+path has an edge to vertices $v_0$ to $v_{i-1}$ and an edge to $v_{i+i}$. Then
+we have $h_{i(i+1)} = i \cdot h_{(i-1)i}$ since the number of edges out of $v_i$
+is $i+1$, $i$ of which move away from $v_{i+1}$, the edge $(i-1, i)$ will be
+traveresed $i$ times in expectation before the edge $(i,i+1)$ is traversed. The
+base case $h_{01} = 1$ by the definition of the graph. So inductively we have
+$h_{0k} = k!$. Now consider an arbitrary graph $G$ and consider a vertex
+$u$ as a starting vertex for a random walk. Partition the graph into two
+sets $S$ and $T$ such that initially only $u$ is in $S$ and every other vertex
+is in $T$. We perform random walks from $S$ to $T$ and once a vertex in $T$ is
+reached we add it to $S$. There is always at least one edge from $S$ to $T$ since
+the graph is strongly connected. Fix a path from $S$ to $T$. In the worst case
+we need to traverse every vertex in $S$ before reaching $T$. Above we showed that
+our hitting time for a directed path graph can be $k!$. We have covered $G$
+only when every vertex is in $S$ and no vertex is in $T$. Given that $S$ increases
+by one vertex at a time, in the worst case the cover time of $G$ is the hitting
+time from $S$ to $T$ for each $n-1$ vertices in $T$ which is equal to
+$$\sum_{k=1}^{n} k! < (n+1)!$$
+Consider a lollipop graph where the candy is a clique of size $\frac{n}{2}$ and
+the stem is a path graph such that each vertex in the path has an edge to every
+node in the clique. Let $u$ be the vertex that connects the clique to the
+path and $v$ be the edge at the end of the path. The hitting time $h_{uv}$ is
+again defined as the product of each edge's hitting time in the path. Since
+each edge in the path has an edge to every vertex in the clique, the hitting time
+of taking an edge $(i,i+1)$ in the path is slightly more than $\frac{n}{2}$.
+Since there are $\frac{n}{2}$ edges in the path,
+$h_{uv} = \frac{n}{2}^{\frac{n}{2}}$ which is $n^{\Omega(n)}$.
+
+\section*{Problem 5a.}
+Consider the following algorithm for computing $\lambda(v)$ for all vertices in
+$V$. Sort all the $r(u)$ values from least to greatest. Let $R_G = (V, R_E)$ be
+the reverse graph of $G$ such that $R_E = \{(v,u) \mid (u,v) \in E \}$. Perform
+a depth-first search from $u$ in $R_G$ where $u$ is the vertex with the least
+$r(u)$ value. For every vertex $v$ reachable from $u$ we set $\lambda(v) = r(u)$
+and increment a counter on $v$ which is initialized at $0$. This process is then
+repeated using the next smallest $r(u')$. When a vertex $v$'s counter reaches
+$t$ we output its $\lambda(v)$ and break all incoming edges to $v$ in $R_G$.
+Clearly, once a vertex's counter reaches $t$ we have found its $\lambda(v)$
+since we've seen the first $t$ smallest $r(u)$ values in $S(v)$. In this
+algorithm every vertex is seen at most $t$ times and every edge is traveresed at
+most $t$ times since it is broken after its $t$'th traversal. So the algorithm
+runs in $O(m\cdot t + n\cdot t) = O((m +n)t)$ time.
+
+\section*{Problem 5b.}
+Consider the two inequalites seperately. The first inequality
+$$ (1-\epsilon)|S(v)| \le \frac{n\cdot t}{\lambda(v)} $$
+can be rewritten as
+$$ \lambda(v) \le \frac{n\cdot t}{(1-\epsilon)|S(v)|} $$
+Since $\lambda(v)$ represents the $t$'th smallest $r(u)$, where $u \in S(v)$,
+for the inequality to hold, there must be at least $t$ such
+$r(u)$'s less than or equal $\frac{n\cdot t}{(1-\epsilon)|S(v)|}$. Let
+$X = X_1 + \cdots + X_{|S(v)|}$ be the sum of binary independent random variables
+such that $X_i = 1$ if $r(u_i) \le \frac{n\cdot t}{(1-\epsilon)|S(v)|}$ where
+$u_i$ is an element of $S(v)$. Since each $v \in V$ is assigned a value $r(v)$
+from $\{1...n\}$ uniformly at random, $X_i$ is a binary independent random
+variable. Therefore
+$$\textbf{E}[X_i] = \textbf{Pr}[X_i = 1] =
+\frac{\frac{n\cdot t}{(1-\epsilon)|S(v)|}}{n} =
+\frac{t}{(1-\epsilon)|S(v)|}$$
+By the linearity of expectation we have
+$$\textbf{E}[X] = \frac{t}{(1-\epsilon)|S(v)|}\cdot |S(v)| =
+\frac{t}{(1-\epsilon)}$$
+From above, we need $X$ to be greater than or equal to $t$ for success. We can
+bound the probability of failure using Chernoff Bounds
+$$\textbf{Pr}[X < t] = \textbf{Pr}[X < (1-\epsilon)\cdot\frac{t}{(1-\epsilon)}]=
+\textbf{Pr}[X < (1-\epsilon)\cdot\textbf{E}[X]] <
+\frac{1}{n^{\frac{18}{(1-\epsilon)}}}$$
+So with probability $1-1/\text{poly}(n)$ the first inequality holds.
+The second inequality
+$$ (1+\epsilon)|S(v)| \ge \frac{n\cdot t}{\lambda(v)} $$
+can be rewritten as
+$$ \lambda(v) \ge \frac{n\cdot t}{(1+\epsilon)|S(v)|} $$
+Clearly the inequality fails when there are more than $t$ such
+$r(u)$'s less than $\frac{n\cdot t}{(1+\epsilon)|S(v)|}$. Let
+$X = X_1 + \cdots + X_{|S(v)|}$ be the sum of binary independent random variables
+such that $X_i = 1$ if $r(u_i) < \frac{n\cdot t}{(1+\epsilon)|S(v)|}$ where
+$u_i$ is an element of $S(v)$. Since each $v \in V$ is assigned a value $r(v)$
+from $\{1...n\}$ uniformly at random, $X_i$ is a binary independent random
+variable. Therefore
+$$\textbf{E}[X_i] = \textbf{Pr}[X_i = 1] =
+\frac{\frac{n\cdot t}{(1+\epsilon)|S(v)|}}{n} =
+\frac{t}{(1+\epsilon)|S(v)|}$$
+By the linearity of expectation we have
+$$\textbf{E}[X] = \frac{t}{(1+\epsilon)|S(v)|}\cdot |S(v)| =
+\frac{t}{(1+\epsilon)}$$
+From above, we need $X$ to be greater than $t$ for the inequality to fail. We
+can again bound the probability of failure using Chernoff Bounds
+$$\textbf{Pr}[X > t] = \textbf{Pr}[X > (1+\epsilon)\cdot\frac{t}{(1+\epsilon)}]=
+\textbf{Pr}[X > (1+\epsilon)\cdot\textbf{E}[X]] <
+\frac{1}{n^{\frac{9}{(1+\epsilon)}}}$$
+So with probability $1-1/\text{poly}(n)$ the second inequality also holds.
+So with probability $1-1/\text{poly}(n)$ the algorithm returns a
+$(1 \pm \epsilon)$ estimate of $S(v)$.
 
 \end{document}

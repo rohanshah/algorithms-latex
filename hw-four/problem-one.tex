@@ -1,0 +1,32 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{titlesec}
+\usepackage{tikz}
+\usepackage{amsfonts,amssymb}
+\usepackage{amsmath}
+\usepackage{comment}
+\relpenalty=9999
+\binoppenalty=9999
+
+\begin{document}
+\pagestyle{plain}
+\titleformat{\subsection}[runin]
+  {\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}[runin]
+  {\normalfont\large\bfseries}{\thesubsubsection}{1em}{}
+
+\section*{Problem 1a.}
+$$ \textbf{minimize } \sum_{i=1}^n x_i $$
+$$ \textbf{ subject to } $$
+$$ \forall k \in \{1...m\},\ \sum_{x_i \in S_k} x_i \ge 1 $$
+$$ \forall i \in \{1...n\},\ x_i \in \{0,1\} $$
+
+\section*{Problem 1b.}
+
+
+
+\section*{Problem 1c.}
+
+
+
+\end{document}
