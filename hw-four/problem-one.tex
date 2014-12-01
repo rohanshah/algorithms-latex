@@ -16,14 +16,20 @@
   {\normalfont\large\bfseries}{\thesubsubsection}{1em}{}
 
 \section*{Problem 1a.}
+Let $C$ be the collection of sets $S_1, S_2, ...,S_m$ and let $x_i$ be a
+variable such that $x_i = 1$ if the element $i \in [1..n]$ is in $H$ and
+$x_i = 0$ otherwise. Then an integer linear program to find an optimal solution
+to this problem can be stated as:
 $$ \textbf{minimize } \sum_{i=1}^n x_i $$
 $$ \textbf{ subject to } $$
-$$ \forall k \in \{1...m\},\ \sum_{x_i \in S_k} x_i \ge 1 $$
-$$ \forall i \in \{1...n\},\ x_i \in \{0,1\} $$
+$$ \forall S_j \in C,\ \sum_{x_i \in S_j} x_i \ge 1 $$
+$$ \forall i \in [1..n],\ x_i \in \{0,1\} $$
 
 \section*{Problem 1b.}
-
-
+Consider the following rounding scheme for the linear programming relaxation for
+the above integer linear program. Let $x^*_i$ be the values associated with each
+variable in the optimal linear programming solution. For each $i \in [1..n]$,
+assign $i$ to the set $T$ with probability $x^*_i$ and return $T$.
 
 \section*{Problem 1c.}
 
