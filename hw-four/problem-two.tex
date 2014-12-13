@@ -57,8 +57,11 @@ is that generating a random number in $[0,1)$ has probability $p_i$ of falling
 in the $i$-th range and therefore using this algorithm there is exactly a $p_i$
 probability of chosing an element $a_i$ from the tree. Note that each coin flip
 reduces the range of $X$ by a half. Also note that the tree has $n$ nodes and is
-a balanced binary search tree so it has a height of $log n$. Therefore only
-$O(\log n)$ coin flips are needed in expectation before an element $a_i$ is
-returned
+a balanced binary search tree so it has a height of $log n$. From part (a) we
+know that we need $O(1)$ bits to determine whether $X$ is greater than or less
+than a given probability. Therefore, using $O(1)$ coin flips we can determine
+which side of the range $X$ falls on for a given node. Since the tree has
+height $\log n$ only $O(\log n)$ coin flips are needed in expectation before an
+element $a_i$ is returned.
 
 \end{document}
