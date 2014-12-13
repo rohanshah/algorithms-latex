@@ -26,10 +26,13 @@ $$ \forall S_j \in C,\ \sum_{x_i \in S_j} x_i \ge 1 $$
 $$ \forall i \in [1..n],\ x_i \in \{0,1\} $$
 
 \section*{Problem 1b.}
-Consider the following rounding scheme for the linear programming relaxation for
-the above integer linear program. Let $x^*_i$ be the values associated with each
-variable in the optimal linear programming solution. For each $i \in [1..n]$,
-assign $i$ to the set $T$ with probability $x^*_i$ and return $T$.
+Consider the following randomized polytime algorithm. Let $x^*_i$ be the value
+associated with each $x_i$ in the optimal linear programming solution. For each
+$i \in [1..n]$, assign $i$ to the set $T$ with probability $x^*_i$. Repeat this
+procedure $10$ times and return $T$. The expected size of $T$ after a single
+iteration is $\sum^n_{i=1} x^*_i = F^*$ so, in expecation, after $10$ iterations
+the size of $T$ is at most $10 F^*$ (if during each iteration a disjoint set of
+$i \in [1..n]$ were selected to be in $T$).
 
 \section*{Problem 1c.}
 

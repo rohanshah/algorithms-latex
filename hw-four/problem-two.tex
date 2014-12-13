@@ -16,11 +16,49 @@
   {\normalfont\large\bfseries}{\thesubsubsection}{1em}{}
 
 \section*{Problem 2a.}
-
-
+Let $0.b_1b_2...$ be the binary fractional representation of $p_1$. Let $X_i$
+be a independent binary random variable that represents the outcome of a coin
+toss ($X_i = 1$ if heads, $X_i = 0$ if tails). Consider the following algorithm:
+for $i = 1,2,...$ if $b_i = 1$ and $X_i = 0$ then return $a_1$, if $b_1 = 0$ and
+$X_i = 1$ return $a_2$, otherwise (if $b_i = X_i$) then increment $i$ and repeat.
+Let $X = 0.X_1X_2...$. The above algorithm returns $a_1$ when $X < p_1$ and
+returns $a_2$ when $X > p_1$. Note that since each $X_i$ is generated
+uniformly at random that $X$ is a number generated uniformly at random from
+the interval $[0,1]$. Therefore we have that $\textbf{Pr}[X < p_1] = p_1$ and
+$\textbf{Pr}[X > p_1] = 1 - p_1 = p_2$. Thus the algorithm correctly outputs
+$a_1$ and $a_2$ with their associated probabilities. Since the algorithm
+terminates when $b_i \neq X_i$ and loops whenever $b_i = X_i$, the algorithm
+terminates with probability $1/2$ during each iteration. Therefore, in
+expectation, the algorithm requires $2$ coin flips to terminate.
 
 \section*{Problem 2b.}
-
-
+Given a set $S = \{a_1,a_2,...,a_n\}$ with associated probabilities $p_i$ we can
+generate $n$ ranges of the form
+$[\sum^{i-1}_{j=1} p_j, \sum^i_{j=1} p_j)$ i.e.
+$[0,p_1), [p_1, p_1 + p_2),..., [\sum^{n-1}_{i=1} p_i, 1)$. Note that each key
+has length equal to
+$$\sum^i_{j=1} p_j - \sum^{i-1}_{j=1} p_j = p_i$$
+Therefore the probability of generating a random number from the interval
+$[0,1)$ that falls in the $i$-th range is $p_i$. Since each range is strictly
+greater than and less than its neighbors we can create a balanced binary search tree
+with $n$ nodes such that each node contains an element $a_i$ and each node has
+an associated key defined by the $i$-th range. Now to choose an element $a_i$
+with probability $p_i$ we do the following. As above we generate a random number
+$X = 0.X_1X_2...$ using the fair coin. Each time $X_i = 0$ we can lower bound
+the range that $X$ falls in. Similarly each time $X_i = 1$ we can upper bound
+the range that $X$ falls in. Starting at the root, we generate $X$ until either
+the upper and lower bound of $X$ fall within the range of the current node
+at which point we return the element $a_i$ at the node. Otherwise if $X$'s lower
+bound is greater than the range of the current node we move to the nodes right
+child and similarly if $X$'s upper bound is less than the current node's range
+we move to the left child and continue generating $X$ until an element $a_i$
+has been returned. The correctness of this algorithm (briefly described above)
+is that generating a random number in $[0,1)$ has probability $p_i$ of falling
+in the $i$-th range and therefore using this algorithm there is exactly a $p_i$
+probability of chosing an element $a_i$ from the tree. Note that each coin flip
+reduces the range of $X$ by a half. Also note that the tree has $n$ nodes and is
+a balanced binary search tree so it has a height of $log n$. Therefore only
+$O(\log n)$ coin flips are needed in expectation before an element $a_i$ is
+returned
 
 \end{document}

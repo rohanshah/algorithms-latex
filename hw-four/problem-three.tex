@@ -16,14 +16,42 @@
   {\normalfont\large\bfseries}{\thesubsubsection}{1em}{}
 
 \section*{Problem 3a.}
+Without loss of generality let each clause in $\Phi$ have exactly $3$
+distinct literals. Let $S$ be a set of $C$ disjoint clauses in $\Phi$.
+A single clause in $\Phi$ (and $S$ respectively) can be satisfied by $7$ of the
+$8$ possible assingments (since there is only one assignment that does
+not satisfy the clause i.e. the one where each of the $3$ literals evaluates to
+false). Since the clauses in $S$ are disjoint, an assignment for the variables
+in one clause does not affect the satisfiabilty of another clause. Therefore,
+there are exactly $7^C$ satisfying assignments out of the total $8^C$ possible
+assignments for the set $S$. For $\Phi$ to be satisfied, both the variables in
+$S$ and the variables not in $S$ need to have a satisfying assignment. Now
+consider the remaining $n-3C$ variables not in $S$. At best, all the $2^{n-3C}$
+possible assignments satisfy the clauses not in $S$. Combining all the possible
+satisfying assignments for the two sets there are at most $7^C \cdot 2^{n-3C}$
+possible satisfying assignments for $\Phi$ out of the total $2^n$ possible
+assignments. To satisfy the condition that at least $1\%$ of the possible
+assignments satisfy all the clauses in the formula $\Phi$ we have the following
+inequality:
+$$\frac{7^C \cdot 2^{n-3C}}{2^n} \ge \frac{1}{100} $$
+which gives a threshold of $34$, after which the inequality does not hold
+and the fact that $1\%$ of the assignments satify $\Phi$ is contradicted.
+
+\section*{Problem 3b.}
+Using our bound for $C$ from part (a), let $S$ be a set of at most $C$ disjoint
+clauses in $\Phi$. By definition $S$ has at most  $3C$ variables. Further, if
+$S$ is the largest set of disjoint clauses in $\Phi$ then every clause not in
+$\Phi$ has a variable in $S$. Proof by contradiction: Say there exists a clause
+in $\Phi$ that has no variables in $S$. Then that clause can be added to $S$
+since it is disjoint from all the other clauses in $S$. Therefore $S$ was not
+the largest disjoint set of clauses to begin with, a contradiction. Thus, an
+equivalent problem to finding a set $V$ of at most $3C$ variables that have the
+property that every clause in $\Phi$ has at least one variable in $V$, is to
+find the largest set of disjoint clauses in $\Phi$ and return all the variables
+it contains.
 
 
-
-\section*{Problem 3a.}
-
-
-
-\section*{Problem 3a.}
+\section*{Problem 3c.}
 
 
 

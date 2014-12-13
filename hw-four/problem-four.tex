@@ -16,11 +16,31 @@
   {\normalfont\large\bfseries}{\thesubsubsection}{1em}{}
 
 \section*{Problem 4a.}
-
-
+Consider the following graph $G(V,E)$ such that $|V| = n$,
+$V = \{u, v_1, ..., v_{n-1}\}$ and \\
+$E = \{(u,v_i) \mid i \in [1..n-1]\}$. Conceptually, this graph has a center
+vertex $u$ and $n-1$ outer vertices $v_i$ with edges to $u$. Now consider an
+implementation of the algorithm where, given an edge $(u,v_i)$, the algorithm
+choses the vertex $v_i$ to be added to $C$. The algorithm outputs a cover
+$C = \{v_1,...,v_{n-1}\}$ since each vertex $v_i$ only covers a single edge.
+However, the smallest vertex cover is simply the set $C = \{u\}$ since the
+vertex $u$ covers every edge in $G$. Therefore the set returned by the algorithm
+is $\Omega(n)$ times larger than the smallest vertex cover.
 
 \section*{Problem 4b.}
-
-
+Let $C^*$ be the optimal vertex cover for a graph $G(V,E)$. Let
+$S \subseteq E$ be the set of edges covered by some vertex $v^* \in C^*$.
+Consider when the algorithm is looking at each edge $(u,v^*) \in S$. With equal
+probability $1/2$ either $u$ or $v$ is added to $C$. Note that if $v^*$ is added
+to $C$ all the edges in $S$ are covered and stop contributing vertices to $C$.
+Since the vertices of an edge are added to $C$ with equal probability $1/2$, in
+expectation only two edges need to be examined before $v^*$ is added to $C$.
+Therefore, for each vertex $v^* \in C^*$, two vertices are added to $C$, in
+expectation (since each edge contributes exactly one vertex to $C$ and we
+need to examine two edges per $v^*$ before $v^*$ is added to $C$). Since there
+are a total of $|C^*|$ such sets $S$ (one for each vertex $v^* \in C^*$), a total
+of $2|C^*|$ vertices are added to $C$ before the algorithm returns a vertex cover
+(which contains all $v^* \in C^*$). Therefore, the algorithm returns a
+2-approximation to the optimal vertex cover in expectation.
 
 \end{document}
