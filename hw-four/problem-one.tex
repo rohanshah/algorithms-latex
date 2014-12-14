@@ -22,20 +22,55 @@ $x_i = 0$ otherwise. Then an integer linear program to find an optimal solution
 to this problem can be stated as:
 $$ \textbf{minimize } \sum_{i=1}^n x_i $$
 $$ \textbf{ subject to } $$
-$$ \forall S_j \in C,\ \sum_{x_i \in S_j} x_i \ge 1 $$
+$$ \forall S \in C,\ \sum_{i \in S} x_i \ge 1 $$
 $$ \forall i \in [1..n],\ x_i \in \{0,1\} $$
 
 \section*{Problem 1b.}
 Consider the following randomized polytime algorithm. Let $x^*_i$ be the value
 associated with each $x_i$ in the optimal linear programming solution. For each
-$i \in [1..n]$, assign $i$ to the set $T$ with probability $x^*_i$. Repeat this
-procedure $10$ times and return $T$. The expected size of $T$ after a single
-iteration is $\sum^n_{i=1} x^*_i = F^*$ so, in expecation, after $10$ iterations
-the size of $T$ is at most $10 F^*$ (if during each iteration a disjoint set of
-$i \in [1..n]$ were selected to be in $T$).
+$i \in [1..n]$, assign $i$ to the set $T$ with probability $x^*_i$.
+\vspace{2mm}
+\newline
+\textbf{Lemma:} $\textbf{E}[|T|] = F^*$ i.e. the size of the set returned
+by the rounding scheme is equal to the optimal value of a solution to the linear
+programming relaxation, in expectation.
+\vspace{2mm}
+\newline
+\textbf{Proof:} Let $X_i$ be a 0/1 random variable such that
+$X_i = 1$ if $x_i \in T$ and $X_i = 0$ otherwise.
+$$\textbf{E}[X_i] = \textbf{Pr}[X_i = 1] = x^*_i$$
+Let $X = X_1 + ... + X_n$. By linearity of expectation we have
+$\textbf{E}[X] = \textbf{E}[X_1] + ... + \textbf{E}[X_n]$.
+$$\textbf{E}[X] = \sum^n_{i=1} x^*_i = F^*$$
+Now consider the probability that $|T\cap S_i|\ge 1$. First we have that
+$\textbf{Pr}[|T\cap S_i| \ge 1] = 1 - \textbf{Pr}[|T\cap S_i| = 0]$.
+Without loss of generality let $S_i = \{1,...,k\}$.
+$$ \textbf{Pr}[|T\cap S_i| = 0] =
+\prod_{i=1}^k 1-x^*_i \le \prod_{i=1}^k e^{-x^*_i}
+= e^{-\sum^k_{i=1} x^*_i} \le \frac{1}{e}$$
+The inequalities above come from properties of the linear program i.e. that
+$x^*_i \in [0,1]$ and $\sum^k_{i=1} x^*_i \ge 1$. So $|S_i \cap T| \ge 1$ with
+probability at least $1-\frac{1}{e}$.
+\vspace{3mm}
+\newline
+We can repeat the above algorithm $10$ times (independently) and take the union
+of the sets it returns. From the lemma above, the expected size of our final set
+is at most $10F^*$. Further, the probability that $|S_i \cap T| = 0$ after
+$10$ independent iterations less than $\left(\frac{1}{e}\right)^{10}$.
+Therefore,
+$$\textbf{Pr}[|S_i\cap T| \ge 1] \ge 1 - \left(\frac{1}{e}\right)^{10}$$
+Let $X_i$ be a 0/1 random variable such that $X_i = 1$ if $|S_i \cap T| \ge 1$
+and $X_i = 0$ otherwise.
+$$\textbf{E}[X_i] = \textbf{Pr}[X_i = 1] = 1 - \left(\frac{1}{e}\right)^{10}$$
+Let $X = X_1 + ... + X_m$. By linearity of expectation we have
+$\textbf{E}[X] = \textbf{E}[X_1] + ... + \textbf{E}[X_n]$.
+$$\textbf{E}[X] = \sum^m_{i=1} 1 - \left(\frac{1}{e}\right)^{10} > \frac{m}{10}$$
 
 \section*{Problem 1c.}
-
-
+If we instead repeat the above algorithm $10 \cdot \log m$ times then the
+expected size of $T$ is $O(\log m)\cdot F^*$. Further we have that
+$$\textbf{Pr}[|S_i\cap T| \ge 1] = 1 - \textbf{Pr}[|S_i\cap T| = 0]
+= 1 - \left(\frac{1}{e}\right)^{10\cdot \log m} = 1 - \frac{1}{m^{10}}$$
+Therefore, $|S_i\cap T| \ge 1$ for $1 \le i \le m$ with probability $1-o(1)$ 
 
 \end{document}
