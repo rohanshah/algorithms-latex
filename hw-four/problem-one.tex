@@ -69,8 +69,10 @@ $$\textbf{E}[X] = \sum^m_{i=1} 1 - \left(\frac{1}{e}\right)^{10} > \frac{m}{10}$
 \section*{Problem 1c.}
 If we instead repeat the above algorithm $10 \cdot \log m$ times then the
 expected size of $T$ is $O(\log m)\cdot F^*$. Further we have that
-$$\textbf{Pr}[|S_i\cap T| \ge 1] = 1 - \textbf{Pr}[|S_i\cap T| = 0]
-= 1 - \left(\frac{1}{e}\right)^{10\cdot \log m} = 1 - \frac{1}{m^{10}}$$
-Therefore, $|S_i\cap T| \ge 1$ for $1 \le i \le m$ with probability $1-o(1)$ 
+$$\textbf{Pr}[|S_i\cap T| = 0]
+= \left(\frac{1}{e}\right)^{10\cdot \log m} = \frac{1}{m^{10}}$$
+The probability that there is any set $S_i$ such that $|S_i\cap T| = 0$ is at
+most $\frac{1}{m^9}$. Therefore, $|S_i\cap T| \ge 1$ for $1 \le i \le m$ with
+probability $1-o(1)$.
 
 \end{document}
