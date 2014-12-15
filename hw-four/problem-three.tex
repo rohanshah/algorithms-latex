@@ -40,29 +40,28 @@ and the fact that $1\%$ of the assignments satify $\Phi$ is contradicted.
 \section*{Problem 3b.}
 Consider the following algorithm for finding a set $V$ of at most $3C$ variables
 with the property that every clause in $\Phi$ has at least one variable in $V$.
-Maintain a list of the clauses each variable belongs to. Chose the variable that
-belongs to the most number of clauses to be in $V$. Repeat this process modulo
-the clauses that are already covered by selected variables until every clause
+Maintain a list of the clauses each variable belongs to. Choose the variable that
+belongs to the most number of clauses to be in $V$. Repeat this process, modulo
+the clauses that are already covered by selected variables, until every clause
 has at least one variable in $V$. This algorithm takes $O(m)$ preprocessing time
-to create the list of variable-clause relationships and requires $O(n)$ space.
-The algorithm runs in at most $O(n)$ (to remove the newly covered clauses from
-the variable-clause relationship list) since the algorithm iterates at most $3C$
-times (which is yet to be shown). Finally we can show that the size of $V$ is at
-most $3C$. Consider the largest set $S$ of disjoint clauses in $\Phi$. From
-part (a) we know that $|S| < C$ therefore $S$ contains at most $3C$ variables.
-Since $S$ is the largest set of disoint clauses, every clause in $\Phi$ has at
-least one variable in $S$. Proof by contradiction. If there exists a clause with
-no variables in $S$ then that clause can be added to $S$ since it is disjoint
-from every other clause in $S$ by definition. But that makes the size of
-$S$ equal to $|S|+1$ therefore the orignal set $S$ was not the largest set of
-disjoint clauses, a contradiction. Now consider the subset of all the variables
-in $S$ that cover every clause in $\Phi$. Clearly each of these variables covers
-enough clauses in $\Phi$ such that all of $\Phi$ is covered by them. Since the
-algoirithm described above choses variables that cover the maximum number of
-clauses to cover $\Phi$, the algorithm needs to select, at most, as many variables
-as the subset just described, which has at most $3C$ variables. The correctness
-of the algorithm is straightforward since it runs until every clause in $\Phi$
-is covered by at least one variable in $V$.
+to create the list of variable-clause relationships. The algorithm runs in at
+most $O(n)$ time (to remove the newly covered clauses from the variable-clause
+relationship list) since the algorithm iterates at most $3C$ times (which is yet
+to be shown). Finally we can show that the size of $V$ is at most $3C$. Consider
+the largest set $S$ of disjoint clauses in $\Phi$. From part (a) we know that
+$|S| \le C$ therefore $S$ contains at most $3C$ variables. Since $S$ is the
+largest set of disoint clauses, every clause in $\Phi$ has at least one variable
+in $S$. Proof by contradiction: if there exists a clause with no variables in
+$S$ then that clause can be added to $S$ since it is disjoint from every other
+clause in $S$, which increases the size of $S$ to $|S|+1$ therefore the orignal
+set $S$ was not the largest set of disjoint clauses, a contradiction. Now
+consider a set $S' \subseteq S$ of all the variables in $S$ that cover every
+clause in $\Phi$. Clearly each of these variables covers a number of clauses in
+$\Phi$ such that all of $\Phi$ is covered by them. Since the above algorithm
+choses variables that cover the maximum number of clauses to cover $\Phi$, the
+algorithm would select, at most, all the variables in $S'$ which is of size at
+most $3C$. The correctness of the algorithm is straightforward since it runs
+until every clause in $\Phi$ is covered by at least one variable in $V$.
 
 \section*{Problem 3c.}
 
