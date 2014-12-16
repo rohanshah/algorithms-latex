@@ -22,7 +22,7 @@ $x_i = 0$ otherwise. Then an integer linear program to find an optimal solution
 to this problem can be stated as:
 $$ \textbf{minimize } \sum_{i=1}^n x_i $$
 $$ \textbf{ subject to } $$
-$$ \forall S \in C,\ \sum_{i \in S} x_i \ge 1 $$
+$$ \forall S_j \in C,\ \sum_{i \in S_j} x_i \ge 1 $$
 $$ \forall i \in [1..n],\ x_i \in \{0,1\} $$
 
 \section*{Problem 1b.}
@@ -42,37 +42,41 @@ $$\textbf{E}[X_i] = \textbf{Pr}[X_i = 1] = x^*_i$$
 Let $X = X_1 + ... + X_n$. By linearity of expectation we have
 $\textbf{E}[X] = \textbf{E}[X_1] + ... + \textbf{E}[X_n]$.
 $$\textbf{E}[X] = \sum^n_{i=1} x^*_i = F^*$$
-Now consider the probability that $|T\cap S_i|\ge 1$. First we have that
-$\textbf{Pr}[|T\cap S_i| \ge 1] = 1 - \textbf{Pr}[|T\cap S_i| = 0]$.
-Without loss of generality let $S_i = \{1,...,k\}$.
+\textbf{Lemma:} $\textbf{Pr}[|T\cap S_i|\ge 1] = 1 - \frac{1}{e}$.
+\vspace{2mm}
+\newline
+\textbf{Proof:} Without loss of generality let $S_i = \{1,...,k\}$.
+$$\textbf{Pr}[|T\cap S_i| \ge 1] = 1 - \textbf{Pr}[|T\cap S_i| = 0]$$
 $$ \textbf{Pr}[|T\cap S_i| = 0] =
 \prod_{i=1}^k 1-x^*_i \le \prod_{i=1}^k e^{-x^*_i}
 = e^{-\sum^k_{i=1} x^*_i} \le \frac{1}{e}$$
 The inequalities above come from properties of the linear program i.e. that
 $x^*_i \in [0,1]$ and $\sum^k_{i=1} x^*_i \ge 1$. So $|S_i \cap T| \ge 1$ with
 probability at least $1-\frac{1}{e}$.
-\vspace{3mm}
-\newline
-We can repeat the above algorithm $10$ times (independently) and take the union
-of the sets it returns. From the lemma above, the expected size of our final set
-is at most $10F^*$. Further, the probability that $|S_i \cap T| = 0$ after
-$10$ independent iterations less than $\left(\frac{1}{e}\right)^{10}$.
-Therefore,
-$$\textbf{Pr}[|S_i\cap T| \ge 1] \ge 1 - \left(\frac{1}{e}\right)^{10}$$
+\newpage
+\noindent We can repeat the above algorithm $5$ times (independently) and take the union
+of the sets it returns. From above, the expected size of our final set is at
+most $5F^*$. By Markov's inequality, the size of the set $T$ is at most
+$10F^*$ with probability at least $\frac{1}{2}$. Further, the probability that
+$|S_i \cap T| = 0$ after $5$ independent iterations is less than
+$\left(\frac{1}{e}\right)^5$. Therefore,
+$$\textbf{Pr}[|S_i\cap T| \ge 1] \ge 1 - \left(\frac{1}{e}\right)^5$$
 Let $X_i$ be a 0/1 random variable such that $X_i = 1$ if $|S_i \cap T| \ge 1$
 and $X_i = 0$ otherwise.
-$$\textbf{E}[X_i] = \textbf{Pr}[X_i = 1] = 1 - \left(\frac{1}{e}\right)^{10}$$
+$$\textbf{E}[X_i] = \textbf{Pr}[X_i = 1] = 1 - \left(\frac{1}{e}\right)^5$$
 Let $X = X_1 + ... + X_m$. By linearity of expectation we have
 $\textbf{E}[X] = \textbf{E}[X_1] + ... + \textbf{E}[X_n]$.
-$$\textbf{E}[X] = \sum^m_{i=1} 1 - \left(\frac{1}{e}\right)^{10} > \frac{m}{10}$$
+$$\textbf{E}[X] = \sum^m_{i=1} 1 - \left(\frac{1}{e}\right)^5 > \frac{9m}{10}$$
+Thus, the set returned has the property that $|S_i\cap T| \ge 1$ for
+at least $\frac{m}{10}$ sets, with probability at least $\frac{1}{2}$.
 
 \section*{Problem 1c.}
-If we instead repeat the above algorithm $10 \cdot \log m$ times then the
-expected size of $T$ is $O(\log m)\cdot F^*$. Further we have that
+If we instead repeat the above algorithm $5 \cdot \log m$ times then the
+expected size of $T$ is at most $O(\log m)\cdot F^*$. Further we have that
 $$\textbf{Pr}[|S_i\cap T| = 0]
-= \left(\frac{1}{e}\right)^{10\cdot \log m} = \frac{1}{m^{10}}$$
+= \left(\frac{1}{e}\right)^{5\cdot \log m} = \frac{1}{m^5}$$
 The probability that there is any set $S_i$ such that $|S_i\cap T| = 0$ is at
-most $\frac{1}{m^9}$. Therefore, $|S_i\cap T| \ge 1$ for $1 \le i \le m$ with
+most $\frac{1}{m^4}$. Therefore, $|S_i\cap T| \ge 1$ for $1 \le i \le m$ with
 probability $1-o(1)$.
 
 \end{document}

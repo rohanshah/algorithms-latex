@@ -18,74 +18,72 @@
 \section*{Problem 3a.}
 Without loss of generality let each clause in $\Phi$ have exactly $3$
 distinct literals. Let $S$ be a set of $C$ disjoint clauses in $\Phi$.
-A single clause in $\Phi$ (and $S$ respectively) can be satisfied by $7$ of the
-$8$ possible assingments (since there is only one assignment that does
-not satisfy the clause i.e. the one where each of the $3$ literals evaluates to
-false). Since the clauses in $S$ are disjoint, an assignment for the variables
-in one clause does not affect the satisfiabilty of another clause. Therefore,
-there are exactly $7^C$ satisfying assignments out of the total $8^C$ possible
-assignments for the set $S$. For $\Phi$ to be satisfied, both the variables in
-$S$ and the variables not in $S$ need to have a satisfying assignment. Now
-consider the remaining $n-3C$ variables not in $S$. At best, all the $2^{n-3C}$
-possible assignments satisfy the clauses not in $S$. Combining all the possible
-satisfying assignments for the two sets there are at most $7^C \cdot 2^{n-3C}$
-possible satisfying assignments for $\Phi$ out of the total $2^n$ possible
-assignments. To satisfy the condition that at least $1\%$ of the possible
-assignments satisfy all the clauses in the formula $\Phi$ we have the following
-inequality:
+A single clause can be satisfied by exactly $7$ out of $8$ possible assingments
+(since there is only one assignment that does not satisfy the clause i.e. the
+one where each of the $3$ literals evaluates to false). Since the clauses in $S$
+are disjoint, an assignment for the variables in one clause does not affect the
+satisfiabilty of another clause. Therefore, there are exactly $7^C$ satisfying
+assignments out of the total $8^C$ possible assignments for the set $S$. For
+$\Phi$ to be satisfied, the variables in $S$ and the variables not in $S$ need
+to have a combined satisfying assignment. Now consider the remaining $n-3C$
+variables not in $S$. At best, all the $2^{n-3C}$ possible assignments satisfy
+the clauses not in $S$. Combining all the possible satisfying assignments for
+the two sets of clauses there are at most $7^C \cdot 2^{n-3C}$ possible
+satisfying assignments for $\Phi$ out of the total $2^n$ possible assignments.
+To satisfy the condition that at least $1\%$ of the possible assignments satisfy
+all the clauses in the formula $\Phi$ we have the following inequality:
 $$\frac{7^C \cdot 2^{n-3C}}{2^n} \ge \frac{1}{100} $$
-which gives a threshold of $34$, after which the inequality does not hold
-and the fact that $1\%$ of the assignments satify $\Phi$ is contradicted.
+which gives a constant upper bound of $34$, after which the inequality does not
+hold and the fact that $1\%$ of the assignments satify $\Phi$ is contradicted.
 
 \section*{Problem 3b.}
 Consider the following algorithm for finding a set $V$ of at most $3C$ variables
 with the property that every clause in $\Phi$ has at least one variable in $V$.
-Maintain a list of the clauses each variable belongs to. Choose the variable that
-belongs to the most number of clauses to be in $V$. Repeat this process, modulo
-the clauses that are already covered by selected variables, until every clause
-has at least one variable in $V$. This algorithm takes $O(m)$ preprocessing time
-to create the list of variable-clause relationships. The algorithm runs in at
-most $O(n)$ time (to remove the newly covered clauses from the variable-clause
-relationship list) since the algorithm iterates at most $3C$ times (which is yet
-to be shown). Finally we can show that the size of $V$ is at most $3C$. Consider
-the largest set $S$ of disjoint clauses in $\Phi$. From part (a) we know that
-$|S| \le C$ therefore $S$ contains at most $3C$ variables. Since $S$ is the
-largest set of disoint clauses, every clause in $\Phi$ has at least one variable
-in $S$. Proof by contradiction: if there exists a clause with no variables in
-$S$ then that clause can be added to $S$ since it is disjoint from every other
-clause in $S$, which increases the size of $S$ to $|S|+1$ therefore the orignal
-set $S$ was not the largest set of disjoint clauses, a contradiction. Now
-consider a set $S' \subseteq S$ of all the variables in $S$ that cover every
-clause in $\Phi$. Clearly each of these variables covers a number of clauses in
-$\Phi$ such that all of $\Phi$ is covered by them. Since the above algorithm
-choses variables that cover the maximum number of clauses to cover $\Phi$, the
-algorithm would select, at most, all the variables in $S'$ which is of size at
-most $3C$. Otherwise it would chose other variables in lieu of variables in $S'$
-that cover more clauses, thereby needing less total variables to cover $\Phi$.
-The correctness of the algorithm is straightforward since it runs until every
-clause in $\Phi$ is covered by at least one variable in $V$.
+Maintain a list of the clauses each variable belongs to. Choose the variable
+that belongs to the most number of clauses to be in $V$. Repeat this process,
+modulo the clauses that are already covered by selected variables, until every
+clause has at least one variable in $V$. This algorithm takes $O(m)$
+preprocessing time to create the list of variable-clause relationships. Since
+the algorithm iterates at most $3C$ times (which is yet to be shown), the
+algorithm runs in at most $O(n)$ time (to remove the newly covered clauses from
+the variable-clause relationships). We can show that the size of $V$ is at most
+$3C$. Consider the largest set $S$ of disjoint clauses in $\Phi$. From part (a)
+we know that $|S| \le C$ therefore $S$ contains at most $3C$ variables. Since
+$S$ is the largest set of disoint clauses, every clause in $\Phi$ has at least
+one variable in $S$. Proof by contradiction: if there exists a clause with no
+variables in $S$ then that clause can be added to $S$ since it is disjoint from
+every other clause in $S$, which increases the size of $S$ to $|S|+1$ therefore
+$S$ was not the largest set of disjoint clauses, a contradiction. Now consider a
+set $S' \subseteq S$ of all the variables in $S$ that cover every clause in
+$\Phi$. Each of these variables covers some number of clauses in $\Phi$.
+Since the above algorithm choses variables that cover the maximum number of
+clauses to cover $\Phi$, the algorithm would select, at most, all the variables
+in $S'$ which is of size at most $3C$. Otherwise it would chose other variables
+in lieu of variables in $S'$ that cover more clauses, thereby needing less total
+variables to cover $\Phi$. Therefore, the algorithm produces a set of at most
+$3C$ variables such that every clause in $\Phi$ is covered by at least one
+of the variables.
 
 \section*{Problem 3c.}
 Using part (b) we can construct a set $V$ of at most $3C$ variables with the
 property that every clause in $\Phi$ has one variable in $V$. Now consider
 chosing one of the $2^{3C}$ possible assignments for the variables in $V$. We
 can use this assignment to reduce $\Phi$ in the following way. First, we can
-remove the clauses that are satisfied by the assignment. Second, note that all
-of the remaining clauses (the ones that are still not satisfied) have at least
-one variable in $\Phi$. Therefore, we can remove that variable from each
-of the unsatisfied clauses (since it has an assignment and that assignment does
-not satisfy the clause) and reduce those clauses to 2-CNF clauses. Now we
-are left with an 2-SAT instance which we can solve in polynomial time. If that
-algorithm finds a satisfying assignment then we can combine it with the original
-assignment for the $3C$ variables in $V$ to get a satisfying assignment for
-$\Phi$. Otherwise, we repeat this procedure, chosing a new assignment for the
-variables in $V$. As noted above, this algorithm will iterate at most $2^{3C}$
-times, once for each possible assignment for the variables in $V$, until the
-algorithm returns a satisfying assignment. Therefore, the algorithm needs to
-solve at most $2^{3C}$ 2-SAT instances. We can reduce $\Phi$ in $O(m)$ time
-and solve a 2-SAT intance in polynomial time therefore the entire algorithm
-runs in polynomial time including the preprocessing construction of the set
-$V$ from part (b).
-
+remove the clauses that are satisfied by the assignment. Second, we can reduce
+each of the unsatisfied clauses to a 2-CNF clause by removing the variable from
+$V$ who's current assignment does not satisfy it. Now we are left with an 2-SAT
+instance (note this instance does not contain any variables from $V$). We can
+solve this 2-SAT instance in polynomial time. If that algorithm finds a
+satisfying assignment then we can combine it with the assignment for the $3C$
+variables in $V$ to get a satisfying assignment for $\Phi$. Otherwise, we repeat
+this procedure, chosing a new assignment for the variables in $V$. As noted
+above, this algorithm will iterate at most $2^{3C}$ times, once for each
+possible assignment for the variables in $V$. Since at least $1\%$ of the
+possible asssignments satisfy $\Phi$ there is at least one assignment for the
+variables in $V$ that satisfy $\Phi$ therefore the algorithm always returns a
+satisfying assignment. The algorithm needs to solve at most $2^{3C}$ 2-SAT
+instances. We can reduce $\Phi$ in $O(m)$ time and solve a 2-SAT intance in
+polynomial time therefore the entire algorithm runs in polynomial time including
+the preprocessing construction of the set $V$ from part (b).
 
 \end{document}

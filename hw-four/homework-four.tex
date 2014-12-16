@@ -15,12 +15,229 @@
 \titleformat{\subsubsection}[runin]
   {\normalfont\large\bfseries}{\thesubsubsection}{1em}{}
 
-\title{CIS 677: Homework X}
-\author{Rohan Shah\\Discussed with: Evan Yeatts}
+\title{CIS 677: Homework 4 / Take-Home Final Exam}
+\author{Rohan Shah}
 \date{}
 
 \maketitle
 
-\section*{Problem Y.}
+\section*{Problem 1a.}
+Let $C$ be the collection of sets $S_1, S_2, ...,S_m$ and let $x_i$ be a
+variable such that $x_i = 1$ if the element $i \in [1..n]$ is in $H$ and
+$x_i = 0$ otherwise. Then an integer linear program to find an optimal solution
+to this problem can be stated as:
+$$ \textbf{minimize } \sum_{i=1}^n x_i $$
+$$ \textbf{ subject to } $$
+$$ \forall S_j \in C,\ \sum_{i \in S_j} x_i \ge 1 $$
+$$ \forall i \in [1..n],\ x_i \in \{0,1\} $$
+
+\section*{Problem 1b.}
+Consider the following randomized polytime algorithm. Let $x^*_i$ be the value
+associated with each $x_i$ in the optimal linear programming solution. For each
+$i \in [1..n]$, assign $i$ to the set $T$ with probability $x^*_i$.
+\vspace{2mm}
+\newline
+\textbf{Lemma:} $\textbf{E}[|T|] = F^*$ i.e. the size of the set returned
+by the rounding scheme is equal to the optimal value of a solution to the linear
+programming relaxation, in expectation.
+\vspace{2mm}
+\newline
+\textbf{Proof:} Let $X_i$ be a 0/1 random variable such that
+$X_i = 1$ if $x_i \in T$ and $X_i = 0$ otherwise.
+$$\textbf{E}[X_i] = \textbf{Pr}[X_i = 1] = x^*_i$$
+Let $X = X_1 + ... + X_n$. By linearity of expectation we have
+$\textbf{E}[X] = \textbf{E}[X_1] + ... + \textbf{E}[X_n]$.
+$$\textbf{E}[X] = \sum^n_{i=1} x^*_i = F^*$$
+\newpage
+\noindent
+\textbf{Lemma:} $\textbf{Pr}[|T\cap S_i|\ge 1] = 1 - \frac{1}{e}$.
+\vspace{2mm}
+\newline
+\textbf{Proof:} Without loss of generality let $S_i = \{1,...,k\}$.
+$$\textbf{Pr}[|T\cap S_i| \ge 1] = 1 - \textbf{Pr}[|T\cap S_i| = 0]$$
+$$ \textbf{Pr}[|T\cap S_i| = 0] =
+\prod_{i=1}^k 1-x^*_i \le \prod_{i=1}^k e^{-x^*_i}
+= e^{-\sum^k_{i=1} x^*_i} \le \frac{1}{e}$$
+The inequalities above come from properties of the linear program i.e. that
+$x^*_i \in [0,1]$ and $\sum^k_{i=1} x^*_i \ge 1$. So $|S_i \cap T| \ge 1$ with
+probability at least $1-\frac{1}{e}$.
+\vspace{4mm}
+\newline
+We can repeat the above algorithm $5$ times (independently) and take the union
+of the sets it returns. From above, the expected size of our final set is at
+most $5F^*$. By Markov's inequality, the size of the set $T$ is at most
+$10F^*$ with probability at least $\frac{1}{2}$. Further, the probability that
+$|S_i \cap T| = 0$ after $5$ independent iterations is less than
+$\left(\frac{1}{e}\right)^5$. Therefore,
+$$\textbf{Pr}[|S_i\cap T| \ge 1] \ge 1 - \left(\frac{1}{e}\right)^5$$
+Let $X_i$ be a 0/1 random variable such that $X_i = 1$ if $|S_i \cap T| \ge 1$
+and $X_i = 0$ otherwise.
+$$\textbf{E}[X_i] = \textbf{Pr}[X_i = 1] = 1 - \left(\frac{1}{e}\right)^5$$
+Let $X = X_1 + ... + X_m$. By linearity of expectation we have
+$\textbf{E}[X] = \textbf{E}[X_1] + ... + \textbf{E}[X_n]$.
+$$\textbf{E}[X] = \sum^m_{i=1} 1 - \left(\frac{1}{e}\right)^5 > \frac{9m}{10}$$
+Thus, the set returned has the property that $|S_i\cap T| \ge 1$ for
+at least $\frac{m}{10}$ sets, with probability at least $\frac{1}{2}$.
+
+\section*{Problem 1c.}
+If we instead repeat the above algorithm $5 \cdot \log m$ times then the
+expected size of $T$ is at most $O(\log m)\cdot F^*$. Further we have that
+$$\textbf{Pr}[|S_i\cap T| = 0]
+= \left(\frac{1}{e}\right)^{5\cdot \log m} = \frac{1}{m^5}$$
+The probability that there is any set $S_i$ such that $|S_i\cap T| = 0$ is at
+most $\frac{1}{m^4}$. Therefore, $|S_i\cap T| \ge 1$ for $1 \le i \le m$ with
+probability $1-o(1)$.
+
+\newpage
+\section*{Problem 2a.}
+Let $0.b_1b_2...$ be the binary fractional representation of $p_1$. Let $X_i$
+be a independent binary random variable that represents the outcome of a coin
+toss ($X_i = 1$ if heads, $X_i = 0$ if tails). Consider the following algorithm:
+for $i = 1,2,...$ if $b_i > X_i$ return $a_1$, if $b_i < X_i$ return $a_2$,
+otherwise (if $b_i == X_i$) loop. Let $X = 0.X_1X_2...$ This algorithm returns
+$a_1$ when $X < p_1$ and returns $a_2$ when $X > p_1$. Therefore,
+$\textbf{Pr}[X < p_1] = p_1$ and $\textbf{Pr}[X > p_1] = 1 - p_1 = p_2$.
+Thus the algorithm correctly outputs $a_1$ and $a_2$ with their associated
+probabilities. Since the algorithm terminates when $b_i \neq X_i$ and loops
+whenever $b_i = X_i$, the algorithm terminates with probability $1/2$ during
+each iteration. In expectation, the algorithm uses $2$ coin flips. By Markov's
+inequality, the algorithm uses more than $200$ coin flips with probability at
+most  $\frac{1}{100}$. Therefore, with high probability the algorithm requires
+$O(1)$ coin tosses to return either $a_1$ or $a_2$. If after $200$ coin tosses
+the algorithm does not return an element we can stop and run it again.
+
+\section*{Problem 2b.}
+Given a set $S = \{a_1,a_2,...,a_n\}$ with associated probabilities $p_i$ we can
+generate $n$ ranges of the form
+$[\sum^{i-1}_{j=1} p_j, \sum^i_{j=1} p_j)$ i.e.
+$[0,p_1), [p_1, p_1 + p_2),..., [\sum^{n-1}_{i=1} p_i, 1)$.
+Note that each range has length equal to
+$$\sum^i_{j=1} p_j - \sum^{i-1}_{j=1} p_j = p_i$$
+The probability of generating a random number from the interval
+$[0,1)$ that falls in the $i$-th range is $p_i$. Since each range is strictly
+greater than and less than its neighbors we can create a balanced binary search tree
+with $n$ nodes such that each node contains an element $a_i$ and each node has
+an associated key defined by the $i$-th range. To choose an element $a_i$
+with probability $p_i$ we do the following. As above we generate a random number
+$X = 0.X_1X_2...$ using the fair coin. Each time $X_i = 0$ we can lower bound
+the range that $X$ falls in. Similarly each time $X_i = 1$ we can upper bound
+the range that $X$ falls in. Starting at the root, we generate $X$. If the
+upper and lower bound of $X$ fall within the range of the current node
+we return the node's element $a_i$. Otherwise, if $X$'s lower bound is greater
+than the range of the current node we move to the nodes right child. Similarly,
+if $X$'s upper bound is less than the current node's range we move to the left
+child. This algorithm continue generating $X$ until an element $a_i$ has been
+returned. The correctness of this algorithm (briefly described above) is that
+generating a random number in $[0,1)$ has probability $p_i$ of falling in the
+$i$-th range and therefore using this algorithm there is exactly a $p_i$
+probability of chosing an element $a_i$ from the tree. Note that each coin flip
+reduces the range of $X$ by a half. Further, the tree has $n$ nodes and is a
+balanced binary search tree so it has a height of $log n$. From part (a) we
+know that only $O(1)$ coin flips (in expectation) are necessary to determine
+whether $X$ is greater than or less a number of the form $0.b_1b_2...$. Each
+range is defined by exactly two such numbers. Therefore, using $O(1)$ coin flips
+we can determine which side of the range $X$ falls for each node. Since the tree
+has height $\log n$ only $O(\log n)$ coin flips are needed in expectation
+before an element $a_i$ is returned.
+
+\section*{Problem 3a.}
+Without loss of generality let each clause in $\Phi$ have exactly $3$
+distinct literals. Let $S$ be a set of $C$ disjoint clauses in $\Phi$.
+A single clause can be satisfied by exactly $7$ out of $8$ possible assingments
+(since there is only one assignment that does not satisfy the clause i.e. the
+one where each of the $3$ literals evaluates to false). Since the clauses in $S$
+are disjoint, an assignment for the variables in one clause does not affect the
+satisfiabilty of another clause. Therefore, there are exactly $7^C$ satisfying
+assignments out of the total $8^C$ possible assignments for the set $S$. For
+$\Phi$ to be satisfied, the variables in $S$ and the variables not in $S$ need
+to have a combined satisfying assignment. Now consider the remaining $n-3C$
+variables not in $S$. At best, all the $2^{n-3C}$ possible assignments satisfy
+the clauses not in $S$. Combining all the possible satisfying assignments for
+the two sets of clauses there are at most $7^C \cdot 2^{n-3C}$ possible
+satisfying assignments for $\Phi$ out of the total $2^n$ possible assignments.
+To satisfy the condition that at least $1\%$ of the possible assignments satisfy
+all the clauses in the formula $\Phi$ we have the following inequality:
+$$\frac{7^C \cdot 2^{n-3C}}{2^n} \ge \frac{1}{100} $$
+which gives a constant upper bound of $34$, after which the inequality does not
+hold and the fact that $1\%$ of the assignments satify $\Phi$ is contradicted.
+
+\section*{Problem 3b.}
+Consider the following algorithm for finding a set $V$ of at most $3C$ variables
+with the property that every clause in $\Phi$ has at least one variable in $V$.
+Maintain a list of the clauses each variable belongs to. Choose the variable
+that belongs to the most number of clauses to be in $V$. Repeat this process,
+modulo the clauses that are already covered by selected variables, until every
+clause has at least one variable in $V$. This algorithm takes $O(m)$
+preprocessing time to create the list of variable-clause relationships. Since
+the algorithm iterates at most $3C$ times (which is yet to be shown), the
+algorithm runs in at most $O(n)$ time (to remove the newly covered clauses from
+the variable-clause relationships). We can show that the size of $V$ is at most
+$3C$. Consider the largest set $S$ of disjoint clauses in $\Phi$. From part (a)
+we know that $|S| \le C$ therefore $S$ contains at most $3C$ variables. Since
+$S$ is the largest set of disoint clauses, every clause in $\Phi$ has at least
+one variable in $S$. Proof by contradiction: if there exists a clause with no
+variables in $S$ then that clause can be added to $S$ since it is disjoint from
+every other clause in $S$, which increases the size of $S$ to $|S|+1$ therefore
+$S$ was not the largest set of disjoint clauses, a contradiction. Now consider a
+set $S' \subseteq S$ of all the variables in $S$ that cover every clause in
+$\Phi$. Each of these variables covers some number of clauses in $\Phi$.
+Since the above algorithm choses variables that cover the maximum number of
+clauses to cover $\Phi$, the algorithm would select, at most, all the variables
+in $S'$ which is of size at most $3C$. Otherwise it would chose other variables
+in lieu of variables in $S'$ that cover more clauses, thereby needing less total
+variables to cover $\Phi$. Therefore, the algorithm produces a set of at most
+$3C$ variables such that every clause in $\Phi$ is covered by at least one
+of the variables.
+
+\section*{Problem 3c.}
+Using part (b) we can construct a set $V$ of at most $3C$ variables with the
+property that every clause in $\Phi$ has one variable in $V$. Now consider
+chosing one of the $2^{3C}$ possible assignments for the variables in $V$. We
+can use this assignment to reduce $\Phi$ in the following way. First, we can
+remove the clauses that are satisfied by the assignment. Second, we can reduce
+each of the unsatisfied clauses to a 2-CNF clause by removing the variable from
+$V$ who's current assignment does not satisfy it. Now we are left with an 2-SAT
+instance (note this instance does not contain any variables from $V$). We can
+solve this 2-SAT instance in polynomial time. If that algorithm finds a
+satisfying assignment then we can combine it with the assignment for the $3C$
+variables in $V$ to get a satisfying assignment for $\Phi$. Otherwise, we repeat
+this procedure, chosing a new assignment for the variables in $V$. As noted
+above, this algorithm will iterate at most $2^{3C}$ times, once for each
+possible assignment for the variables in $V$. Since at least $1\%$ of the
+possible asssignments satisfy $\Phi$ there is at least one assignment for the
+variables in $V$ that satisfy $\Phi$ therefore the algorithm always returns a
+satisfying assignment. The algorithm needs to solve at most $2^{3C}$ 2-SAT
+instances. We can reduce $\Phi$ in $O(m)$ time and solve a 2-SAT intance in
+polynomial time therefore the entire algorithm runs in polynomial time including
+the preprocessing construction of the set $V$ from part (b).
+
+\section*{Problem 4a.}
+Consider the following graph $G(V,E)$ such that $|V| = n$,
+$V = \{u, v_1, ..., v_{n-1}\}$ and \\
+$E = \{(u,v_i) \mid i \in [1..n-1]\}$. Conceptually, this graph has a center
+vertex $u$ and $n-1$ outer vertices $v_i$ with edges only to $u$. Now consider
+an implementation of the algorithm where, given an edge $(u,v_i)$, the algorithm
+choses the vertex $v_i$ to be added to $C$. The algorithm outputs a cover
+$C = \{v_1,...,v_{n-1}\}$ since each vertex $v_i$ only covers a single edge.
+However, the smallest vertex cover is simply the set $C = \{u\}$ since the
+vertex $u$ covers every edge in $G$. Therefore the set returned by the algorithm
+is $\Omega(n)$ times larger than the smallest vertex cover.
+
+\section*{Problem 4b.}
+Let $C^*$ be the optimal vertex cover for some graph $G(V,E)$. Let
+$S \subseteq E$ be the set of edges covered by some vertex $v^* \in C^*$.
+Consider when the algorithm is looking at each edge $(v^*,w) \in S$. With equal
+probability $1/2$ either $v^*$ or $w$ is added to $C$. Note that if $v^*$ is
+added to $C$ all the edges in $S$ are covered and do not contribute any more
+vertices to $C$. Since the vertices of an edge are added to $C$ with equal
+probability $1/2$, in expectation only two edges need to be examined before
+$v^*$ is added to $C$. Therefore, for each vertex $v^* \in C^*$, two vertices
+are added to $C$, in expectation (since each edge contributes exactly one vertex
+to $C$ and we need to examine two edges per $v^*$ before $v^*$ is added to $C$).
+Since there are a total of $|C^*|$ such sets $S$ (one for each vertex
+$v^* \in C^*$), a total of $2|C^*|$ vertices are added to $C$ before the
+algorithm returns a vertex cover (one that contains all $v^* \in C^*$).
+Therefore, the algorithm returns a 2-approximation to the optimal vertex cover
+in expectation.
 
 \end{document}
